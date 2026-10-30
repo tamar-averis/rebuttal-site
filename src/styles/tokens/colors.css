@@ -1,0 +1,66 @@
+:root{
+  /* Base palette — from Averis Brand Guidelines v1 §04, reused as-is for Rebuttal */
+  --rebuttal-harbor-green:#16473F;
+  --rebuttal-pine:#1E5A4E;
+  --rebuttal-deep-pine:#0F3630;
+  --rebuttal-champagne:#E4C58A;
+  --rebuttal-champagne-deep:#C79A4E;
+  --rebuttal-bone:#F5F2EB;
+  --rebuttal-sand:#E7E0D2;
+  --rebuttal-charcoal:#1D211F;
+  /* Extended neutrals (derived from the guidelines document's own greys) */
+  --rebuttal-slate:#3F4A45;
+  --rebuttal-slate-mid:#4A544E;
+  --rebuttal-slate-light:#7A847E;
+  --rebuttal-mist:#8A948E;
+  --rebuttal-page:#EDEEEA;
+  --rebuttal-white:#FFFFFF;
+  --rebuttal-green-on-dark-sub:#CCD8D2;
+  --rebuttal-green-on-dark-mute:#8FA39B;
+
+  /* Semantic surfaces */
+  --surface-page:var(--rebuttal-page);
+  --surface-card:var(--rebuttal-white);
+  --surface-raised:var(--rebuttal-bone);
+  --surface-neutral:var(--rebuttal-sand);
+  --surface-inverse:var(--rebuttal-harbor-green);
+  --surface-inverse-deep:var(--rebuttal-deep-pine);
+
+  /* Semantic text */
+  --text-heading:var(--rebuttal-harbor-green);
+  --text-body:var(--rebuttal-slate);
+  --text-strong:var(--rebuttal-charcoal);
+  --text-muted:var(--rebuttal-slate-light);
+  --text-faint:var(--rebuttal-mist);
+  --text-eyebrow:var(--rebuttal-pine);
+  --text-on-inverse:var(--rebuttal-bone);
+  --text-on-inverse-sub:var(--rebuttal-green-on-dark-sub);
+  --text-on-inverse-mute:var(--rebuttal-green-on-dark-mute);
+  --text-accent:var(--rebuttal-champagne-deep);
+  --text-accent-on-dark:var(--rebuttal-champagne);
+
+  /* Semantic accents & lines */
+  --accent-line:var(--rebuttal-champagne);
+  --accent-line-on-light:var(--rebuttal-champagne-deep);
+  --border-hairline:rgba(22,71,63,.10);
+  --border-soft:rgba(22,71,63,.14);
+  --border-strong:rgba(22,71,63,.30);
+  --border-on-inverse:rgba(245,242,235,.18);
+  --tint-green-05:rgba(22,71,63,.05);
+  --tint-green-03:rgba(22,71,63,.03);
+  --tint-champagne-16:rgba(228,197,138,.16);
+
+  /* Semantic status — muted, never alarmist. Red is reserved for destructive UI only. */
+  --status-proven:var(--rebuttal-harbor-green);
+  --status-review:var(--rebuttal-champagne-deep);
+  --status-neutral:var(--rebuttal-slate-light);
+  --status-critical:#B4573A;
+  --status-critical-tint:rgba(199,90,60,.05);
+  --status-critical-border:rgba(199,90,60,.18);
+
+  /* Interaction */
+  --interactive-primary:var(--rebuttal-harbor-green);
+  --interactive-primary-hover:var(--rebuttal-pine);
+  --interactive-primary-active:var(--rebuttal-deep-pine);
+  --focus-ring:var(--rebuttal-champagne-deep);
+}

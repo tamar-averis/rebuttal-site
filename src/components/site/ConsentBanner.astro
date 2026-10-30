@@ -1,0 +1,202 @@
+---
+/* Consent gate for everything that measures or identifies a visitor.
+ *
+ * Two things load only after Accept:
+ *   - SampleAd, an advertising audience pixel
+ *   - Apollo, a website tracker that resolves a visitor's network to a company
+ *
+ * Apollo is the reason this banner exists rather than a cookie notice. It does
+ * not just measure traffic, it attributes a visit to an organization and sends
+ * that to a third party. On a site where the visit itself says something about
+ * a provider's exposure, that needs an explicit yes.
+ *
+ * Google tags are handled separately, through Consent Mode defaults in the head
+ * of Base.astro. GTM still loads for everyone, but with ad and analytics storage
+ * denied until this banner updates the state.
+ */
+import Button from '../core/Button.astro';
+
+// PLACEHOLDER — Rebuttal needs its own SampleAd pixel and Apollo app id, not
+// the Averis site's. Do not reuse another property's IDs; it merges audiences.
+const SAMPLEAD_SRC = '';
+const APOLLO_APP_ID = '';
+---
+
+<div
+  class="consent"
+  id="consent-banner"
+  role="region"
+  aria-label="Cookie and tracking consent"
+  data-samplead={SAMPLEAD_SRC}
+  data-apollo={APOLLO_APP_ID}
+  hidden
+>
+  <div class="consent__inner">
+    <div class="consent__copy">
+      <p class="consent__title">Before we measure anything</p>
+      <p class="consent__body">
+        We use Google Analytics and Google Ads to understand how this site performs, and services that can identify the
+        organization a visitor arrives from. None of it runs unless you accept. Declining leaves the site fully working.
+      </p>
+    </div>
+    <div class="consent__actions">
+      <Button variant="secondary" size="sm" id="consent-decline">Decline</Button>
+      <Button variant="primary" size="sm" id="consent-accept">Accept</Button>
+      <a class="consent__link" href="/legal/privacy">Privacy policy</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const STORAGE_KEY = 'rebuttal-cookie-consent';
+
+  /* The trackers beacon the page URL. If anything identifying is still on it,
+     nothing is sent, regardless of consent. HubSpot appends its own parameters
+     on the redirect to /request-received, so this is not hypothetical. */
+  const PII_PARAMS = ['email', 'email_address', 'submissionGuid'];
+
+  const urlCarriesPII = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      return PII_PARAMS.some((k) => params.has(k));
+    } catch {
+      return true; // Cannot tell, so assume the worst.
+    }
+  };
+
+  const banner = document.getElementById('consent-banner');
+  if (banner) {
+    const sampleAdSrc = banner.dataset.samplead ?? '';
+    const apolloAppId = banner.dataset.apollo ?? '';
+
+    const loadSampleAd = () => {
+      if (!sampleAdSrc || urlCarriesPII()) return;
+      if (document.querySelector(`script[src="${sampleAdSrc}"]`)) return;
+      const s = document.createElement('script');
+      s.src = sampleAdSrc;
+      s.async = true;
+      document.head.appendChild(s);
+    };
+
+    const loadApollo = () => {
+      if (!apolloAppId || urlCarriesPII()) return;
+      if (document.querySelector('script[src*="assets.apollo.io/micro/website-tracker"]')) return;
+      const s = document.createElement('script');
+      s.src = `https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache=${Math.random().toString(36).substring(7)}`;
+      s.async = true;
+      s.defer = true;
+      s.onload = () => {
+        const w = window as Window & { trackingFunctions?: { onLoad: (o: { appId: string }) => void } };
+        w.trackingFunctions?.onLoad({ appId: apolloAppId });
+      };
+      document.head.appendChild(s);
+    };
+
+    const grantGoogle = () => {
+      const w = window as Window & { gtag?: (...args: unknown[]) => void };
+      w.gtag?.('consent', 'update', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted',
+      });
+    };
+
+    const loadAll = () => {
+      loadSampleAd();
+      loadApollo();
+    };
+
+    const stored = (() => {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch {
+        return null;
+      }
+    })();
+
+    if (stored === 'accepted') {
+      // Google consent was already replayed in the head. Only the third-party
+      // trackers still need loading on this page view.
+      loadAll();
+    } else if (stored !== 'declined') {
+      banner.hidden = false;
+    }
+
+    const remember = (value: string) => {
+      try {
+        localStorage.setItem(STORAGE_KEY, value);
+      } catch {}
+      banner.hidden = true;
+    };
+
+    document.getElementById('consent-accept')?.addEventListener('click', () => {
+      remember('accepted');
+      grantGoogle();
+      loadAll();
+    });
+
+    document.getElementById('consent-decline')?.addEventListener('click', () => {
+      remember('declined');
+    });
+  }
+</script>
+
+<style>
+  .consent {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 60;
+    background: var(--surface-raised);
+    border-top: 1px solid var(--border-soft);
+    box-shadow: 0 -8px 28px rgba(22, 71, 63, 0.08);
+    padding: 18px 24px;
+  }
+
+  .consent[hidden] {
+    display: none;
+  }
+
+  .consent__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+  }
+
+  .consent__title {
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    color: var(--text-heading);
+    margin-bottom: 4px;
+  }
+
+  .consent__body {
+    font-size: var(--text-body-sm);
+    color: var(--text-body);
+    max-width: 68ch;
+  }
+
+  .consent__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .consent__link {
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 760px) {
+    .consent__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+    }
+  }
+</style>

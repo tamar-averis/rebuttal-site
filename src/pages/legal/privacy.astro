@@ -1,0 +1,157 @@
+---
+import Legal from '../../layouts/Legal.astro';
+
+const toc = [
+  { id: 'scope', label: 'Scope' },
+  { id: 'information-we-collect', label: 'Information we collect' },
+  { id: 'how-we-use-it', label: 'How we use it' },
+  { id: 'cookies-and-analytics', label: 'Cookies and tracking' },
+  { id: 'disclosure', label: 'Disclosure' },
+  { id: 'retention', label: 'Retention' },
+  { id: 'security', label: 'Security' },
+  { id: 'your-choices', label: 'Your choices' },
+  { id: 'changes-and-contact', label: 'Changes and contact' },
+];
+---
+
+<Legal
+  title="Privacy policy"
+  description="How Rebuttal collects, uses, and protects information when you visit rebuttal.health or engage us for claims analysis."
+  updated="29 October 2026"
+  toc={toc}
+>
+  <section id="scope">
+    <h2>Scope</h2>
+    <p>
+      This policy covers rebuttal.health and the business information we handle in the course of an engagement. Protected
+      health information received under a Business Associate Agreement is governed separately by that agreement and by
+      our <a href="/legal/hipaa-security">HIPAA and security</a> commitments, not by this policy.
+    </p>
+  </section>
+
+  <section id="information-we-collect">
+    <h2>Information we collect</h2>
+    <ul>
+      <li>
+        <strong>Information you give us.</strong> Name, work email, organization, role, and anything you write in a
+        contact form or send by email.
+      </li>
+      <li>
+        <strong>Engagement data.</strong> Claims extracts, remittance data, documentation, and correspondence provided by
+        a client or its counsel under a written agreement.
+      </li>
+      <li>
+        <strong>Site data.</strong> Standard server logs and analytics: IP address, browser, pages viewed, referring
+        page, and, where you arrived from an advertisement, the click identifier that records which ad brought you here.
+      </li>
+    </ul>
+    <p>
+      We do not ask for protected health information through the website, and we ask that you not send it there. We
+      provide a secure channel at intake.
+    </p>
+  </section>
+
+  <section id="how-we-use-it">
+    <h2>How we use it</h2>
+    <ul>
+      <li>To respond to your inquiry and scope an engagement.</li>
+      <li>To perform the analysis a client has retained us to perform.</li>
+      <li>To operate, secure, and improve the website.</li>
+      <li>To meet legal, regulatory, and contractual obligations.</li>
+    </ul>
+    <p>
+      We do not sell information. We do not use client engagement data to train general-purpose models or for any purpose
+      outside that engagement.
+    </p>
+  </section>
+
+  <section id="cookies-and-analytics">
+    <h2>Cookies and tracking</h2>
+    <p>
+      Nothing that measures or identifies you runs until you choose. On your first visit a banner asks whether to allow
+      it. Until you accept, advertising and analytics storage are switched off, and the services named below are not
+      loaded at all. If you decline, they are never loaded, and the site works exactly as it would otherwise. Your choice
+      is kept in your browser; clearing site data will bring the banner back.
+    </p>
+    <p>If you accept, the following run:</p>
+    <ul>
+      <li>
+        <strong>Google Analytics and Google Ads</strong>, through Google Tag Manager, to measure which pages are read and
+        which advertisements lead to an inquiry.
+      </li>
+      <li>
+        <strong>SampleAd</strong>, an advertising service that helps us reach similar audiences.
+      </li>
+      <li>
+        <strong>Apollo</strong>, a visitor identification service. It uses your network address to estimate the
+        <em>organization</em> a visit came from, and supplies that to us. It does not tell us who you are as an individual,
+        but you should understand that accepting allows your employer to be inferred from your visit.
+      </li>
+    </ul>
+    <p>
+      When a form is submitted we record that a request was made, and nothing else. <strong
+        >No name, email address, organization, amount at issue, or free text is sent to Google, SampleAd, Apollo, or any
+        other analytics provider</strong
+      >, and protected health information is never sent to them under any circumstances. Where you arrived from an
+      advertisement, the Google click identifier is kept in your browser for up to 90 days and submitted with the form,
+      so we can tell Google which inquiries became engagements.
+    </p>
+    <p>
+      The contact form itself is hosted by HubSpot, which stores the submission and notifies us. The form is functional
+      rather than analytical, so it loads whatever you choose above; if you would rather not use it, email or call us
+      instead and nothing is recorded by a third party.
+    </p>
+    <p>
+      You can also block or delete cookies in your browser, and Google offers its own
+      <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">opt-out tools</a> and
+      <a href="https://myadcenter.google.com/" target="_blank" rel="noopener">advertising controls</a>. None of this
+      affects your ability to use the site or to contact us.
+    </p>
+    <p>
+      As stated throughout, do not send protected health information through the form. We provide a secure channel at
+      intake.
+    </p>
+  </section>
+
+  <section id="disclosure">
+    <h2>Disclosure</h2>
+    <p>
+      We share information only with the client and the counsel it designates, with vetted subprocessors bound by written
+      confidentiality and security terms, and where compelled by law. <strong>We do not take payer engagements</strong>,
+      and we do not share client information with payers.
+    </p>
+  </section>
+
+  <section id="retention">
+    <h2>Retention</h2>
+    <p>
+      Engagement data is retained for the period set out in the engagement letter, then deleted or returned at the
+      client&rsquo;s direction. Website inquiry records are retained for 24 months. Server logs are retained for 90 days.
+    </p>
+  </section>
+
+  <section id="security">
+    <h2>Security</h2>
+    <p>
+      Encryption in transit and at rest, least-privilege access, logged access to engagement data, and annual review of
+      controls. Detail is in <a href="/legal/hipaa-security">HIPAA and security</a>.
+    </p>
+  </section>
+
+  <section id="your-choices">
+    <h2>Your choices</h2>
+    <p>
+      Write to <a href="mailto:info@rebuttal.health">info@rebuttal.health</a> to ask what we hold about you, correct it, or ask
+      us to delete it. Where state or federal law grants you additional rights, we honour them. Individuals whose PHI we
+      process should direct requests to the provider that holds the record; we act on that provider&rsquo;s instruction.
+    </p>
+  </section>
+
+  <section id="changes-and-contact">
+    <h2>Changes and contact</h2>
+    <p>
+      Material changes will be posted here with a revised date. Questions:
+      <a href="mailto:info@rebuttal.health">info@rebuttal.health</a>.
+    </p>
+  </section>
+</Legal>
