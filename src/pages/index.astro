@@ -56,7 +56,7 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
         <Eyebrow tone="dark">Healthcare Claims Analysis</Eyebrow>
         <h1 class="hero__heading">
           When a payer alleges overpayment,<br />
-          <span class="affirm-underline">we prove you were right.</span>
+          <span class="affirm-underline">payers are not the only ones with claws.</span>
         </h1>
         <p class="hero__lead">
           Rebuttal analyzes claims data at scale to build the evidence that stands up in audit and appeal, working
@@ -70,22 +70,29 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
           </Button>
         </div>
       </div>
-      <Card tone="green" padding={0} class="glance">
-        <div class="glance__head">
-          <span class="glance__title">One matter, at a glance</span>
-          <Badge tone="inverse">Sample</Badge>
-        </div>
-        <div class="glance__body">
-          {
-            GLANCE.map(([k, v], i) => (
-              <div class:list={['glance__row', i > 0 && 'glance__row--divided']}>
-                <span class="glance__key">{k}</span>
-                <span class:list={['glance__value', i === 3 && 'glance__value--accent']}>{v}</span>
-              </div>
-            ))
-          }
-        </div>
-      </Card>
+      <div class="glance__wrap">
+        <svg class="glance__claw" width="72" height="92" viewBox="0 0 72 92" fill="none" aria-hidden="true">
+          <path d="M8 4 C22 24 30 46 20 88" stroke="var(--accent-line)" stroke-width="5" stroke-linecap="round" />
+          <path d="M34 2 C46 24 52 48 44 90" stroke="var(--accent-line)" stroke-width="5" stroke-linecap="round" />
+          <path d="M60 6 C68 26 70 48 64 84" stroke="var(--accent-line)" stroke-width="5" stroke-linecap="round" />
+        </svg>
+        <Card tone="green" padding={0} class="glance">
+          <div class="glance__head">
+            <span class="glance__title">One matter, at a glance</span>
+            <Badge tone="inverse">Sample</Badge>
+          </div>
+          <div class="glance__body">
+            {
+              GLANCE.map(([k, v], i) => (
+                <div class:list={['glance__row', i > 0 && 'glance__row--divided']}>
+                  <span class="glance__key">{k}</span>
+                  <span class:list={['glance__value', i === 3 && 'glance__value--accent']}>{v}</span>
+                </div>
+              ))
+            }
+          </div>
+        </Card>
+      </div>
     </div>
   </div>
 
@@ -222,7 +229,20 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
   }
 
   /* Glance card */
+  .glance__wrap {
+    position: relative;
+  }
+
+  .glance__claw {
+    position: absolute;
+    top: -30px;
+    right: -26px;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
   .hero__inner :global(.glance) {
+    position: relative;
     background: rgba(245, 242, 235, 0.06);
     border: 1px solid var(--border-on-inverse);
     box-shadow: none;
