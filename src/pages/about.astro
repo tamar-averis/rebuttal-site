@@ -22,13 +22,13 @@ const FOUNDERS = [
     name: 'Tamar Schapira',
     role: 'Co-founder & CEO',
     bio: 'Two decades in healthcare compliance and claims strategy. Tamar runs provider relationships and the practitioner calibration that grounds every AR recovery engagement.',
-    initials: 'TS',
+    photo: '/assets/tamar-schapira.jpg',
   },
   {
     name: 'Nadav Bernstein',
     role: 'Co-founder, CPO & SME',
     bio: 'Former engineering lead on claims analytics platforms at scale. Nadav owns the data pipeline, payer forensics tooling, and the 835/837 reconciliation engine.',
-    initials: 'NB',
+    photo: '/assets/nadav-bernstein.jpg',
   },
 ];
 
@@ -87,7 +87,7 @@ const DELIVER = [
       {
         FOUNDERS.map((p) => (
           <Card padding={26} tone="bone">
-            <div class="founder__chip" aria-hidden="true">{p.initials}</div>
+            <img src={p.photo} alt="" class="founder__photo" />
             <div class="founder__role">{p.role}</div>
             <div class="founder__name">{p.name}</div>
             <p class="founder__bio">{p.bio}</p>
@@ -193,19 +193,12 @@ const DELIVER = [
     margin-top: 26px;
   }
 
-  .founder__chip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
+  .founder__photo {
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background: var(--surface-inverse);
-    color: var(--text-accent-on-dark);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.02em;
+    object-fit: cover;
+    display: block;
   }
 
   .founder__role {
