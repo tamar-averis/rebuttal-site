@@ -34,6 +34,21 @@ const { label, name, options = [], value, class: className } = Astro.props;
     border: 0;
     margin: 0;
     padding: 0;
-    font-family: var(--font-ui);
+    font-family: var(--font-sans);
+  }
+
+  .radio-group__label {
+    font-family: var(--font-sans);
+    font-stretch: var(--stretch-semiexpanded);
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+    color: var(--fg);
+  }
+
+  .radio-group__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 24px;
   }
 </style>

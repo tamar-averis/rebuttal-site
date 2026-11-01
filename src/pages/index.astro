@@ -1,44 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
-import Section from '../components/site/Section.astro';
-import Eyebrow from '../components/site/Eyebrow.astro';
 import CtaBand from '../components/site/CtaBand.astro';
+import ClaimDocument from '../components/site/ClaimDocument.astro';
 import Button from '../components/core/Button.astro';
-import Card from '../components/core/Card.astro';
-import Badge from '../components/core/Badge.astro';
 import Tag from '../components/core/Tag.astro';
-import Icon from '../components/core/Icon.astro';
-import AffirmationLine from '../components/core/AffirmationLine.astro';
 
-const GLANCE = [
+const GLANCE: [string, string, boolean?][] = [
   ['Claim lines in the extract', '1,412,908'],
   ['Lines cited by payer', '6,140'],
   ['Supported on the record', '5,918'],
-  ['Demand withdrawn', '$18.6M'],
+  ['Demand withdrawn', '$18.6M', true],
 ];
 
-const PROBLEM_CARDS = [
-  [
-    'database',
-    'Data at full scale',
-    'We work from the complete extract, not the payer\u2019s sample: every line, every modifier, every remittance.',
-  ],
-  [
-    'file-search',
-    'Line-level evidence',
-    'Each disputed line is traced back to the documentation that supports it, and cited.',
-  ],
-  [
-    'scale',
-    'Built for counsel',
-    'Findings arrive in the form your attorneys file: reproducible, sourced, and defensible under challenge.',
-  ],
+const PILLARS: [string, string][] = [
+  ['Every line, not the sample', 'We work from the complete extract, not the payer\u2019s sample: every line, every modifier, every remittance.'],
+  ['Evidence, line by line', 'Each disputed line is traced back to the documentation that supports it, and cited.'],
+  ['Ready for counsel to file', 'Findings arrive in the form your attorneys file: reproducible, sourced, and defensible under challenge.'],
 ];
 
-const STATS = [
+const STATS: [string, string, boolean?][] = [
   ['1M+', 'Claim lines reviewed'],
   ['60 days', 'To file rebuttal'],
-  ['$100M+', 'Largest exposure defended'],
+  ['$100M+', 'Largest exposure defended', true],
 ];
 
 const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'Defense counsel', 'Compliance teams'];
@@ -49,405 +32,97 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
   description="Rebuttal analyzes healthcare claims data at scale to build the evidence that defends providers against payer overpayment allegations."
   page="home"
 >
-  <div class="hero">
-    <div class="hero__glow" aria-hidden="true"></div>
-    <div class="wrap hero__inner">
+  <section class="rb-phero grain" data-theme="green">
+    <div class="rb-wrap rb-hero-grid">
       <div>
-        <h1 class="hero__heading">
-          Every clawback deserves <span class="hero__underline">a rebuttal.</span>
-        </h1>
-        <p class="hero__lead">
+        <h1 class="display rb-h1" style="margin-top:0">Payers are not the only ones with claws.</h1>
+        <p class="rb-sub">
           When a payer alleges overpayment, we analyze the full claims record and build the evidence your attorneys
           file. We prove you were right.
         </p>
-        <div class="hero__actions">
-          <Button variant="inverse" size="lg" href="/contact">Request an analysis</Button>
-          <Button variant="ghost" size="lg" href="/how-it-works" class="hero__ghost">How it works</Button>
+        <div class="rb-ctas">
+          <Button size="lg" href="/contact">Request an analysis</Button>
+          <Button size="lg" variant="secondary" href="/how-it-works">How it works</Button>
         </div>
+        <p class="small" style="margin-top:28px">Built with healthcare attorneys &middot; Line-level, defensible, audit-ready</p>
       </div>
-      <img src="/assets/mark-reversed.svg" alt="" class="hero__symbol" />
+      <div class="rb-hero-visual"><ClaimDocument /></div>
     </div>
-  </div>
+  </section>
 
-  <Section tone="light">
-    <div class="problem">
+  <section class="rb-sec cream">
+    <div class="rb-wrap rb-split">
       <div>
-        <Eyebrow>The problem</Eyebrow>
-        <h2 class="section-heading">An allegation is an extrapolation, not a finding.</h2>
-        <p class="problem__body">
-          Payers sample a few dozen claims, find error, and project it across years of billing. The projection is only
-          as sound as the sample. We rebuild the record line by line, the coding, the documentation, the medical
-          necessity, and show where the sample does not carry the conclusion.
+        <div class="eyebrow">The problem</div>
+        <h2 class="rb-h2">An allegation is an extrapolation, not a finding.</h2>
+        <p class="rb-body">
+          Payers sample a few dozen claims, find error, and project it across years of billing. The projection is
+          only as sound as the sample. We rebuild the record line by line, the coding, the documentation, the
+          medical necessity, and show where the sample does not carry the conclusion.
         </p>
       </div>
-      <div class="glance__wrap">
-        <svg class="glance__claw" width="72" height="92" viewBox="0 0 72 92" fill="none" aria-hidden="true">
-          <path d="M8 4 C22 24 30 46 20 88" stroke="var(--accent-line-on-light)" stroke-width="5" stroke-linecap="round" />
-          <path d="M34 2 C46 24 52 48 44 90" stroke="var(--accent-line-on-light)" stroke-width="5" stroke-linecap="round" />
-          <path d="M60 6 C68 26 70 48 64 84" stroke="var(--accent-line-on-light)" stroke-width="5" stroke-linecap="round" />
-        </svg>
-        <Card tone="green" padding={0} class="glance">
-          <div class="glance__head">
-            <span class="glance__title">One matter, at a glance</span>
-            <Badge tone="inverse">Sample</Badge>
-          </div>
-          <div class="glance__body">
-            {
-              GLANCE.map(([k, v], i) => (
-                <div class:list={['glance__row', i > 0 && 'glance__row--divided']}>
-                  <span class="glance__key">{k}</span>
-                  <span class:list={['glance__value', i === 3 && 'glance__value--accent']}>{v}</span>
-                </div>
-              ))
-            }
-          </div>
-        </Card>
+      <div class="rb-glance" aria-label="One matter, at a glance">
+        <div class="rb-glance-head"><span>One matter, at a glance</span><span>Sample</span></div>
+        {
+          GLANCE.map(([k, v, lit]) => (
+            <div class:list={['rb-glance-row', lit && 'lit']}>
+              <span>{k}</span>
+              <span class="v">{v}</span>
+            </div>
+          ))
+        }
       </div>
     </div>
-    <div class="problem__cards">
+    <div class="rb-wrap rb-grid3" style="margin-top:96px">
       {
-        PROBLEM_CARDS.map(([ic, t, d]) => (
-          <Card tone="bone" padding={24}>
-            <Icon name={ic} size={22} color="var(--accent-line-on-light)" />
-            <h3 class="card-heading">{t}</h3>
-            <p class="card-body">{d}</p>
-          </Card>
-        ))
-      }
-    </div>
-  </Section>
-
-  <Section tone="green">
-    <div class="stats">
-      {
-        STATS.map(([n, l]) => (
-          <div>
-            <div class="stats__number">{n}</div>
-            <AffirmationLine tone="dark" width={52} class="stats__rule" />
-            <div class="stats__label">{l}</div>
+        PILLARS.map(([t, d]) => (
+          <div class="rb-rule">
+            <h3 class="rb-h3">{t}</h3>
+            <p class="rb-body" style="margin-top:10px;font-size:17px">{d}</p>
           </div>
         ))
       }
     </div>
-  </Section>
+  </section>
 
-  <Section tone="bone">
-    <div class="audience">
-      <div>
-        <Eyebrow>Who we work with</Eyebrow>
-        <h2 class="section-heading">Providers, their counsel, and no one else.</h2>
-        <p class="audience__body">
-          We do not take payer engagements. Health systems, physician groups, and the law firms defending them are the
-          whole of our practice.
-        </p>
-        <div class="audience__tags">
-          {AUDIENCE.map((t) => <Tag>{t}</Tag>)}
-        </div>
-      </div>
-      <Card padding={30}>
-        <p class="quote">
-          &ldquo;The extrapolation collapsed once the full population was on the table. Rebuttal put the record in front of
-          us in a form we could file.&rdquo;
-        </p>
-        <AffirmationLine width={72} class="quote__rule" />
-        <div class="quote__attribution">
-          Partner, healthcare regulatory practice<br />Sample attribution, replace with an approved client quote.
-        </div>
-      </Card>
+  <section class="rb-sec tight" data-theme="night">
+    <div class="rb-wrap rb-stats">
+      {
+        STATS.map(([n, l, gold]) => (
+          <div class="rb-stat">
+            <div class:list={['rb-num', gold && 'gold']}>{n}</div>
+            <p>{l}</p>
+          </div>
+        ))
+      }
     </div>
-  </Section>
+  </section>
 
-  <CtaBand>Send us the allegation letter. We will tell you what the data says.</CtaBand>
+  <section class="rb-sec white">
+    <div class="rb-wrap">
+      <div class="eyebrow">Who we work with</div>
+      <h2 class="rb-h2">On the provider&rsquo;s side, and no one else&rsquo;s.</h2>
+      <p class="rb-body">
+        We do not take payer engagements. Health systems, physician groups, and the law firms defending them are the
+        whole of our practice.
+      </p>
+      <div class="rb-tags">{AUDIENCE.map((t) => <Tag>{t}</Tag>)}</div>
+    </div>
+  </section>
+
+  <section class="rb-sec grain" data-theme="night">
+    <div class="rb-wrap">
+      <blockquote style="margin:0">
+        <p class="rb-quote">
+          &ldquo;The extrapolation collapsed once the full population was on the table. Rebuttal put the record in
+          front of us in a form we could file.&rdquo;
+        </p>
+        <footer class="rb-cite">
+          Partner, healthcare regulatory practice<small>Sample attribution, replace with an approved client quote.</small>
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <CtaBand title="Every clawback deserves a rebuttal." sub="Send us the allegation letter. We will tell you what the data says." />
 </Base>
-
-<style>
-  /* Hero */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    background: var(--surface-inverse);
-    color: var(--text-on-inverse);
-  }
-
-  /* The only decorative gradient in the system. */
-  .hero__glow {
-    position: absolute;
-    right: -160px;
-    bottom: -200px;
-    width: 620px;
-    height: 620px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--tint-champagne-16), transparent 66%);
-  }
-
-  .hero__inner {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 64px;
-    align-items: center;
-    padding: 112px 40px 104px;
-  }
-
-  .hero__heading {
-    font-size: var(--text-display-2);
-    font-weight: 800;
-    line-height: 1.04;
-    letter-spacing: var(--tracking-display);
-    color: var(--text-on-inverse);
-    max-width: 680px;
-  }
-
-  .hero__underline {
-    position: relative;
-    display: inline-block;
-  }
-
-  .hero__underline::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: -10px;
-    bottom: -8px;
-    height: 6px;
-    border-radius: 3px;
-    background: var(--text-accent-on-dark);
-  }
-
-  .hero__lead {
-    margin-top: 36px;
-    font-size: var(--text-lead);
-    color: var(--text-on-inverse-sub);
-    max-width: var(--measure-narrow);
-  }
-
-  .hero__actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 38px;
-    flex-wrap: wrap;
-  }
-
-  .hero__inner :global(.hero__ghost) {
-    color: var(--text-on-inverse);
-    border: 1px solid var(--border-on-inverse);
-  }
-
-  .hero__inner :global(.hero__ghost:hover) {
-    background: rgba(245, 242, 235, 0.06);
-    color: var(--text-on-inverse);
-  }
-
-  .hero__symbol {
-    width: 340px;
-    display: block;
-  }
-
-  /* Glance card */
-  .glance__wrap {
-    position: relative;
-  }
-
-  .glance__claw {
-    position: absolute;
-    top: -30px;
-    right: -26px;
-    opacity: 0.4;
-    pointer-events: none;
-  }
-
-  .problem :global(.glance) {
-    position: relative;
-  }
-
-  .glance__head {
-    padding: 20px 22px;
-    border-bottom: 1px solid var(--border-on-inverse);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .glance__title {
-    font-size: var(--text-caption);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--text-on-inverse-mute);
-    font-weight: 600;
-  }
-
-  .glance__body {
-    padding: 22px;
-  }
-
-  .glance__row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    padding: 12px 0;
-  }
-
-  .glance__row--divided {
-    border-top: 1px solid var(--border-on-inverse);
-  }
-
-  .glance__key {
-    font-size: var(--text-body-sm);
-    color: var(--text-on-inverse-mute);
-  }
-
-  .glance__value {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 19px;
-    color: var(--text-on-inverse);
-  }
-
-  .glance__value--accent {
-    color: var(--text-accent-on-dark);
-  }
-
-  /* Problem */
-  .problem {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: 56px;
-    align-items: center;
-  }
-
-  .section-heading {
-    font-size: var(--text-h2);
-    font-weight: 700;
-    letter-spacing: var(--tracking-display);
-  }
-
-  .problem__body {
-    margin-top: 16px;
-    font-size: var(--text-body-lg);
-    color: var(--text-body);
-    max-width: var(--measure);
-  }
-
-  .problem__cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-    margin-top: 44px;
-  }
-
-  .card-heading {
-    font-size: var(--text-h3);
-    font-weight: 600;
-    margin-top: 16px;
-  }
-
-  .card-body {
-    margin-top: 9px;
-    font-size: var(--text-body-md);
-    color: var(--text-body);
-  }
-
-  /* Stats */
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 34px;
-  }
-
-  .stats__number {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 42px;
-    color: var(--text-on-inverse);
-    line-height: 1;
-  }
-
-  .stats :global(.stats__rule) {
-    margin: 14px 0;
-  }
-
-  .stats__label {
-    font-size: var(--text-body-sm);
-    color: var(--text-on-inverse-sub);
-    max-width: 190px;
-  }
-
-  /* Audience */
-  .audience {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 56px;
-    align-items: center;
-  }
-
-  .audience__body {
-    margin-top: 16px;
-    font-size: var(--text-body-lg);
-    color: var(--text-body);
-  }
-
-  .audience__tags {
-    display: flex;
-    gap: 8px;
-    margin-top: 22px;
-    flex-wrap: wrap;
-  }
-
-  .quote {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 22px;
-    color: var(--text-heading);
-    line-height: 1.4;
-  }
-
-  .audience :global(.quote__rule) {
-    margin: 22px 0 14px;
-  }
-
-  .quote__attribution {
-    font-size: var(--text-body-sm);
-    color: var(--text-muted);
-  }
-
-  /* Responsive */
-  @media (max-width: 1000px) {
-    .hero__inner {
-      grid-template-columns: 1fr;
-      gap: 32px;
-      padding: 64px var(--section-pad-x-sm) 56px;
-    }
-
-    .hero__symbol {
-      width: 160px;
-      order: -1;
-    }
-
-    .hero__heading {
-      font-size: 40px;
-    }
-
-    .problem,
-    .audience {
-      grid-template-columns: 1fr;
-      gap: 26px;
-    }
-
-    .problem__cards {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  @media (max-width: 700px) {
-    .hero__heading {
-      font-size: 34px;
-    }
-
-    .problem__cards,
-    .stats {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

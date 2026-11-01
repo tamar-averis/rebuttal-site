@@ -1,71 +1,56 @@
 ---
 import Base from '../layouts/Base.astro';
-import Section from '../components/site/Section.astro';
-import Eyebrow from '../components/site/Eyebrow.astro';
+import PageHero from '../components/site/PageHero.astro';
+import CtaBand from '../components/site/CtaBand.astro';
 import Card from '../components/core/Card.astro';
-import Icon from '../components/core/Icon.astro';
 import Badge from '../components/core/Badge.astro';
 import Button from '../components/core/Button.astro';
-import Tag from '../components/core/Tag.astro';
 import Tabs from '../components/navigation/Tabs.astro';
-import Tooltip from '../components/feedback/Tooltip.astro';
-import AffirmationLine from '../components/core/AffirmationLine.astro';
 
-const STEPS = [
-  ['Intake', 'file-text', 'The allegation letter, the sample, and the extrapolation method. We start where the payer started.'],
-  ['Extraction', 'database', 'Full claims, remittance, and documentation data for the audit period, the whole population, not the sample.'],
-  ['Analysis', 'line-chart', 'Line-by-line review against coding rules and clinical documentation, with every determination sourced.'],
-  ['Rebuttal', 'scale', 'A cited findings packet your counsel can file, plus expert support through appeal.'],
+const STEPS: [string, string, string][] = [
+  ['01', 'Intake', 'The allegation letter, the sample, and the extrapolation method. We start where the payer started.'],
+  ['02', 'Extraction', 'Full claims, remittance, and documentation data for the audit period, the whole population, not the sample.'],
+  ['03', 'Analysis', 'Line-by-line review against coding rules and clinical documentation, with every determination sourced.'],
+  ['04', 'Rebuttal', 'A cited findings packet your counsel can file, plus expert support through appeal.'],
 ];
 
-const DELIVERABLES = [
+const RECEIVE: [string, string][] = [
   ['Findings packet', 'Every cited line, its determination, and the documentation reference.'],
   ['Statistical rebuttal', 'Where the sample fails to support the projection, and by how much.'],
   ['Source manifest', 'A hash-verified index of every file analyzed.'],
   ['Expert support', 'Declarations and testimony through appeal, if it goes that far.'],
 ];
 
-const TIMELINE = [
-  ['Days 1\u20135', 'Intake and data access'],
-  ['Days 6\u201320', 'Extraction and validation'],
-  ['Days 21\u201350', 'Line-level analysis'],
-  ['Days 51\u201360', 'Packet delivered to counsel'],
+const ROWS: [string, string, string, string, string][] = [
+  ['CLM-0093-221', '99285', 'Emergency, level 5', 'Supported', 'Documentation supports acuity'],
+  ['CLM-0093-244', '99284', 'Emergency, level 4', 'Supported', 'Time and MDM documented'],
+  ['CLM-0094-018', '99215', 'Office, established', 'In review', 'Awaiting provider note'],
+  ['CLM-0094-102', 'J18.9', 'Pneumonia, unspecified', 'Supported', 'Radiology corroborates'],
+  ['CLM-0094-311', '99223', 'Inpatient admit', 'Disputed', 'Payer cites missing history'],
+  ['CLM-0095-007', '99291', 'Critical care, 30\u201374 min', 'Supported', 'Duration recorded in flowsheet'],
 ];
 
-const ROWS = [
-  ['CLM-0093-221', '99285', 'Emergency, level 5', 'Supported', 'proven', 'Documentation supports acuity'],
-  ['CLM-0093-244', '99284', 'Emergency, level 4', 'Supported', 'proven', 'Time and MDM documented'],
-  ['CLM-0094-018', '99215', 'Office, established', 'In review', 'review', 'Awaiting provider note'],
-  ['CLM-0094-102', 'J18.9', 'Pneumonia, unspecified', 'Supported', 'proven', 'Radiology corroborates'],
-  ['CLM-0094-311', '99223', 'Inpatient admit', 'Disputed', 'critical', 'Payer cites missing history'],
-  ['CLM-0095-007', '99291', 'Critical care, 30\u201374 min', 'Supported', 'proven', 'Duration recorded in flowsheet'],
-];
+const TONE: Record<string, 'supported' | 'neutral' | 'unsupported'> = {
+  Supported: 'supported',
+  'In review': 'neutral',
+  Disputed: 'unsupported',
+};
 
-const MANIFEST = [
-  ['837I claims extract', 'sha256:4f9c\u2026a71b', '1,412,908 lines'],
-  ['835 remittance', 'sha256:b120\u20269ce4', '1,208,441 lines'],
-  ['Clinical documentation index', 'sha256:77ad\u202630f1', '214,882 documents'],
-];
-
-const COMPLIANCE = [
+const COMPLIANCE: [string, string][] = [
   [
     'OIG compliance program',
-    'scale',
     'The seven elements: written policies, a named compliance officer, training, reporting channels, auditing, enforcement, and corrective action. We help you stand each one up and evidence that it operates.',
   ],
   [
     'HIPAA privacy and security',
-    'shield-check',
     'Risk analysis, administrative and technical safeguards, workforce training, business associate agreements, and breach notification procedures your team can follow without a consultant in the room.',
   ],
   [
     'Coding and billing accuracy',
-    'file-text',
     'Documentation standards and an internal review cadence, so coding and medical necessity hold up on their own terms long before a payer asks about them.',
   ],
   [
     'Payer contract obligations',
-    'clock',
     'Timely filing rules, audit-response duties, and reporting requirements, tracked contract by contract so every obligation has an owner and a date.',
   ],
 ];
@@ -76,575 +61,156 @@ const COMPLIANCE = [
   description="Four steps, one standard: intake, extraction, analysis, and a cited rebuttal packet your counsel can file. Plus compliance requirements we help you implement and monitor."
   page="method"
 >
-  <Section tone="green" class="method-hero">
-    <Eyebrow tone="dark">How it works</Eyebrow>
-    <h1 class="method-hero__heading">Four steps, one standard: everything we assert, we can source.</h1>
-    <p class="method-hero__lead">
-      We work alongside healthcare attorneys to ensure your audit meets the legal requirement to rebuttal. The method is
-      fixed so the findings are reproducible: your counsel receives the same artifacts every time, in the same order.
+  <PageHero eyebrow="How it works" title="We&rsquo;ve already read every line." wide>
+    <p class="rb-sub">
+      We work alongside healthcare attorneys to ensure your audit meets the legal requirement to rebuttal. The
+      method is fixed so the findings are reproducible: your counsel receives the same artifacts every time, in the
+      same order.
     </p>
-  </Section>
-
-  <Section tone="light">
-    <div class="steps">
+    <div class="tagline" style="margin-top:72px;color:var(--gold)">Four steps, one standard: everything we assert, we can source.</div>
+    <div class="rb-grid4" style="margin-top:28px">
       {
-        STEPS.map(([t, ic, d], i) => (
-          <Card padding={24} tone={i === 3 ? 'bone' : 'light'} accent={i === 3}>
-            <div class="steps__head">
-              <Icon name={ic} size={20} color="var(--text-heading)" />
-              <span class="steps__number">{String(i + 1).padStart(2, '0')}</span>
-            </div>
-            <h3 class="steps__title">{t}</h3>
-            <p class="steps__body">{d}</p>
-          </Card>
+        STEPS.map(([n, t, d]) => (
+          <div class="rb-step">
+            <div class="n">{n}</div>
+            <h3 class="rb-h3" style="margin-top:8px">{t}</h3>
+            <p>{d}</p>
+          </div>
         ))
       }
     </div>
+  </PageHero>
 
-    <div class="engagement">
-      <div>
-        <Eyebrow>What you receive</Eyebrow>
+  <section class="rb-sec cream">
+    <div class="rb-wrap">
+      <div class="eyebrow">What you receive</div>
+      <h2 class="rb-h2">The same artifacts, every time, in the same order.</h2>
+      <div class="rb-grid4" style="margin-top:40px">
         {
-          DELIVERABLES.map(([t, d]) => (
-            <div class="deliverable">
-              <Icon name="check" size={17} color="var(--accent-line-on-light)" class="deliverable__icon" />
-              <div>
-                <div class="deliverable__title">{t}</div>
-                <div class="deliverable__body">{d}</div>
-              </div>
+          RECEIVE.map(([t, d]) => (
+            <div class="rb-receive">
+              <h3 class="rb-h3" style="font-size:20px">{t}</h3>
+              <p>{d}</p>
             </div>
           ))
         }
       </div>
-      <Card tone="sand" padding={28}>
-        <Eyebrow>Engagement</Eyebrow>
-        <h3 class="engagement__title">Sixty days, typical</h3>
-        <div class="timeline">
-          {
-            TIMELINE.map(([w, d], i) => (
-              <div class:list={['timeline__row', i > 0 && 'timeline__row--divided']}>
-                <span class="timeline__period">{w}</span>
-                <span class="timeline__phase">{d}</span>
-              </div>
-            ))
-          }
+
+      <div style="margin-top:112px">
+        <div class="eyebrow">Engagement</div>
+        <h2 class="rb-h2">Sixty days, typical.</h2>
+        <div class="rb-timeline" role="list">
+          <div role="listitem" style="background:var(--cream-200)"><span class="d">Days 1&ndash;5</span><span>Intake and data access</span></div>
+          <div role="listitem" style="background:var(--green-100)"><span class="d">Days 6&ndash;20</span><span>Extraction and validation</span></div>
+          <div role="listitem" style="background:var(--rebuttal-green);color:var(--cream)"><span class="d">Days 21&ndash;50</span><span>Line-level analysis</span></div>
+          <div role="listitem" style="background:var(--gold);color:var(--rebuttal-green)"><span class="d">Days 51&ndash;60</span><span style="font-weight:600">Packet delivered to counsel</span></div>
         </div>
-        <AffirmationLine width={80} class="engagement__rule" />
-        <p class="engagement__footnote">
-          This is an average. An engagement can run shorter or longer depending on the matter type.
+        <p class="small" style="margin-top:16px">This is an average. An engagement can run shorter or longer depending on the matter type.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rb-sec grain" data-theme="night">
+    <div class="rb-wrap">
+      <div class="eyebrow">The evidence</div>
+      <h2 class="rb-h2">Here is your rebuttal.</h2>
+      <p class="rb-body">An anonymized extract from a commercial payer matter. Every determination links to its source document.</p>
+      <div class="rb-table-wrap">
+        <div class="rb-table-meta"><span>Commercial payer</span><span>2021&ndash;2023</span><span>6,140 cited lines</span><span>Anonymized</span></div>
+        <div style="padding:0 24px">
+          <Tabs
+            id="evidence"
+            tone="dark"
+            tabs={[
+              { value: 'findings', label: 'Findings', count: 6 },
+              { value: 'sampling', label: 'Sampling' },
+              { value: 'manifest', label: 'Source manifest' },
+            ]}
+          >
+            <div slot="findings">
+              <div class="rb-table-scroll">
+                <table class="rb-table">
+                  <thead>
+                    <tr><th>Claim</th><th>Code</th><th>Description</th><th>Determination</th><th>Basis</th><th>Source document</th></tr>
+                  </thead>
+                  <tbody>
+                    {
+                      ROWS.map((r) => (
+                        <tr class:list={[r[0] === 'CLM-0095-007' && 'lit']}>
+                          <td class="id">{r[0]}</td>
+                          <td class="code">{r[1]}</td>
+                          <td>{r[2]}</td>
+                          <td><Badge tone={TONE[r[3]]}>{r[3]}</Badge></td>
+                          <td>{r[4]}</td>
+                          <td><a href="#">Open the source document</a></td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <div class="rb-table-foot">
+                <span>Showing 6 of 6,140 cited lines</span>
+                <Button size="sm" variant="secondary" iconLeft="download">Download packet</Button>
+              </div>
+            </div>
+
+            <div slot="sampling">
+              <div style="padding:32px 24px">
+                <h3 class="rb-h3">What the population shows</h3>
+                <p class="rb-body" style="margin-top:12px">
+                  Error rate in the full cited set is 3.6%, not the 27% the sample implies. The projection does not
+                  survive the wider record.
+                </p>
+                <div style="display:flex;gap:48px;flex-wrap:wrap;margin-top:32px">
+                  <div><div class="rb-num" style="font-size:56px;color:var(--gold)">3.6%</div><div class="small" style="margin-top:8px">Error rate, full cited set</div></div>
+                  <div><div class="rb-num" style="font-size:56px;color:#A9B5AC">27%</div><div class="small" style="margin-top:8px">Error rate the sample implies</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div slot="manifest">
+              <div style="padding:24px">
+                <div class="rb-manifest" style="margin-top:0">
+                  <span>835 remittance</span><span class="h">sha256:b120&hellip;9ce4</span><span>1,208,441 lines</span>
+                  <span>Clinical documentation index</span><span class="h">sha256:77ad&hellip;30f1</span><span>214,882 documents</span>
+                </div>
+              </div>
+            </div>
+          </Tabs>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rb-sec cream">
+    <div class="rb-wrap">
+      <div class="eyebrow">Compliance</div>
+      <h2 class="rb-h2">The strongest rebuttal is a record that was already in order.</h2>
+      <p class="rb-body">
+        Defending an allegation is where we start, not where we stop. We help you put your compliance requirements
+        into practice and keep them there, holding the record to the same standard before a payer asks as we would
+        after.
+      </p>
+      <div class="rb-grid2" style="margin-top:48px;gap:40px 48px">
+        {
+          COMPLIANCE.map(([t, d]) => (
+            <div class="rb-compl">
+              <h3 class="rb-h3">{t}</h3>
+              <p>{d}</p>
+            </div>
+          ))
+        }
+      </div>
+      <Card variant="green" padding={40} style="margin-top:64px">
+        <h3 class="rb-h3" style="font-size:26px">Implementation is one day. Monitoring is every day after.</h3>
+        <p style="font-size:18px;line-height:1.6;color:#CFC8B8;margin-top:14px;max-width:40em">
+          We set the review cadence with your team and run it alongside them, keeping the documentation current so
+          what you attest to is what the record shows. You stay the owner of your program. We make it provable.
         </p>
       </Card>
     </div>
-  </Section>
+  </section>
 
-  <Section tone="bone">
-    <Eyebrow>The evidence</Eyebrow>
-    <h2 class="evidence__heading">What a findings packet looks like</h2>
-    <p class="evidence__lead">
-      An anonymized extract from a commercial payer matter. Every determination links to its source document.
-    </p>
-    <div class="evidence__filters">
-      <Tag tone="outline">Commercial payer</Tag>
-      <Tag tone="outline">2021&ndash;2023</Tag>
-      <Tag tone="outline">6,140 cited lines</Tag>
-      <Tag tone="green">Anonymized</Tag>
-    </div>
-
-    <Tabs
-      id="evidence"
-      tabs={[
-        { value: 'findings', label: 'Findings', count: 6 },
-        { value: 'method', label: 'Sampling' },
-        { value: 'sources', label: 'Source manifest' },
-      ]}
-    >
-      <div slot="findings">
-        <Card padding={0} class="panel">
-          <div class="table-scroll">
-            <table class="findings">
-              <thead>
-                <tr>
-                  {['Claim', 'Code', 'Description', 'Determination', 'Basis'].map((h) => <th>{h}</th>)}
-                  <th><span class="sr-only">Source document</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  ROWS.map(([id, code, desc, det, tone, basis]) => (
-                    <tr>
-                      <td class="findings__mono findings__mono--strong">{id}</td>
-                      <td class="findings__mono">{code}</td>
-                      <td class="findings__desc">{desc}</td>
-                      <td><Badge tone={tone}>{det}</Badge></td>
-                      <td class="findings__basis">{basis}</td>
-                      <td class="findings__action">
-                        <Tooltip content="Open the source document" placement="left">
-                          <Icon name="file-search" size={16} color="var(--text-faint)" />
-                        </Tooltip>
-                      </td>
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
-          </div>
-          <div class="findings__footer">
-            <span class="findings__count">Showing 6 of 6,140 cited lines</span>
-            <Button size="sm" variant="secondary">
-              <Icon slot="icon-left" name="download" size={14} />
-              Download packet
-            </Button>
-          </div>
-        </Card>
-      </div>
-
-      <div slot="method">
-        <Card padding={28} class="panel">
-          <div class="sampling">
-            <div>
-              <h3 class="sampling__title">The payer&rsquo;s sample</h3>
-              <p class="sampling__body">
-                40 claims, drawn from a 2021&ndash;2023 population of 1,412,908 lines, projected to a $23.1M demand.
-              </p>
-            </div>
-            <div>
-              <h3 class="sampling__title">What the population shows</h3>
-              <p class="sampling__body">
-                Error rate in the full cited set is 3.6%, not the 27% the sample implies. The projection does not survive
-                the wider record.
-              </p>
-            </div>
-          </div>
-          <AffirmationLine width={90} class="sampling__rule" />
-        </Card>
-      </div>
-
-      <div slot="sources">
-        <Card padding={28} class="panel">
-          {
-            MANIFEST.map(([n, h, c], i) => (
-              <div class:list={['manifest__row', i > 0 && 'manifest__row--divided']}>
-                <span class="manifest__name">{n}</span>
-                <span class="manifest__hash">{h}</span>
-                <span class="manifest__count">{c}</span>
-              </div>
-            ))
-          }
-        </Card>
-      </div>
-    </Tabs>
-  </Section>
-
-  <Section tone="light">
-    <Eyebrow>Compliance</Eyebrow>
-    <h2 class="compliance__heading">The strongest rebuttal is a record that was already in order.</h2>
-    <p class="compliance__lead">
-      Defending an allegation is where we start, not where we stop. We help you put your compliance requirements into
-      practice and keep them there, holding the record to the same standard before a payer asks as we would after.
-    </p>
-
-    <div class="compliance">
-      {
-        COMPLIANCE.map(([t, ic, d]) => (
-          <Card padding={24}>
-            <Icon name={ic} size={20} color="var(--text-heading)" />
-            <h3 class="compliance__title">{t}</h3>
-            <p class="compliance__body">{d}</p>
-          </Card>
-        ))
-      }
-    </div>
-
-    <Card tone="sand" padding={28} class="monitoring">
-      <div class="monitoring__inner">
-        <Icon name="line-chart" size={20} color="var(--accent-line-on-light)" class="monitoring__icon" />
-        <div>
-          <h3 class="monitoring__title">Implementation is one day. Monitoring is every day after.</h3>
-          <p class="monitoring__body">
-            We set the review cadence with your team and run it alongside them, keeping the documentation current so
-            what you attest to is what the record shows. You stay the owner of your program. We make it provable.
-          </p>
-        </div>
-      </div>
-    </Card>
-  </Section>
+  <CtaBand title="Send us the allegation letter." sub="We will tell you what the data says." />
 </Base>
-
-<style>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-
-  /* Hero */
-  /* On <Section>, so outside this page's scope. */
-  :global(.method-hero) {
-    padding: 72px 0 64px;
-  }
-
-  .method-hero__heading {
-    font-size: var(--text-display-2);
-    font-weight: 800;
-    color: var(--text-on-inverse);
-    letter-spacing: var(--tracking-display);
-    max-width: 760px;
-    line-height: 1.06;
-  }
-
-  .method-hero__lead {
-    margin-top: 24px;
-    font-size: var(--text-lead);
-    color: var(--text-on-inverse-sub);
-    max-width: var(--measure);
-  }
-
-  /* Steps */
-  .steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-  }
-
-  .steps__head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .steps__number {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 13px;
-    color: var(--accent-line-on-light);
-  }
-
-  .steps__title {
-    font-size: var(--text-h3);
-    font-weight: 600;
-    margin-top: 18px;
-  }
-
-  .steps__body {
-    margin-top: 8px;
-    font-size: var(--text-body-md);
-  }
-
-  /* Deliverables and timeline */
-  .engagement {
-    margin-top: 56px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 56px;
-  }
-
-  .deliverable {
-    display: flex;
-    gap: 14px;
-    padding: 16px 0;
-    border-top: 1px solid var(--border-hairline);
-  }
-
-  .deliverable :global(.deliverable__icon) {
-    margin-top: 3px;
-  }
-
-  .deliverable__title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 15px;
-    color: var(--text-heading);
-  }
-
-  .deliverable__body {
-    font-size: var(--text-body-md);
-    color: var(--text-body);
-    margin-top: 4px;
-  }
-
-  .engagement__title {
-    font-size: var(--text-h2);
-    font-weight: 700;
-  }
-
-  .timeline {
-    margin-top: 24px;
-  }
-
-  .timeline__row {
-    display: grid;
-    grid-template-columns: 92px 1fr;
-    gap: 16px;
-    padding: 13px 0;
-  }
-
-  .timeline__row--divided {
-    border-top: 1px solid var(--border-soft);
-  }
-
-  .timeline__period {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-muted);
-    padding-top: 2px;
-  }
-
-  .timeline__phase {
-    font-size: var(--text-body-md);
-    color: var(--text-strong);
-  }
-
-  .engagement :global(.engagement__rule) {
-    margin-top: 22px;
-  }
-
-  .engagement__footnote {
-    margin-top: 14px;
-    font-size: var(--text-body-sm);
-    color: var(--text-muted);
-  }
-
-  /* Evidence */
-  .evidence__heading {
-    font-size: var(--text-h2);
-    font-weight: 700;
-    letter-spacing: var(--tracking-display);
-    max-width: 700px;
-  }
-
-  .evidence__lead {
-    margin-top: 14px;
-    font-size: var(--text-body-lg);
-    color: var(--text-body);
-    max-width: var(--measure);
-  }
-
-  .evidence__filters {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 26px 0;
-  }
-
-  :global(.panel) {
-    margin-top: 24px;
-  }
-
-  .table-scroll {
-    overflow-x: auto;
-  }
-
-  .findings {
-    width: 100%;
-    min-width: 760px;
-    border-collapse: collapse;
-    font-size: var(--text-body-sm);
-  }
-
-  .findings thead tr {
-    background: var(--surface-raised);
-  }
-
-  .findings th {
-    text-align: left;
-    padding: 12px 18px;
-    font-size: var(--text-micro);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--text-eyebrow);
-    font-weight: 600;
-    border-bottom: 1px solid var(--border-hairline);
-  }
-
-  .findings tbody tr {
-    border-bottom: 1px solid var(--border-hairline);
-  }
-
-  .findings td {
-    padding: 13px 18px;
-  }
-
-  .findings__mono {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .findings__mono--strong {
-    color: var(--text-strong);
-  }
-
-  .findings__desc {
-    color: var(--text-strong);
-  }
-
-  .findings__basis {
-    color: var(--text-muted);
-  }
-
-  .findings__action {
-    text-align: right;
-  }
-
-  .findings__footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 18px;
-    background: var(--surface-raised);
-  }
-
-  .findings__count {
-    font-size: var(--text-caption);
-    color: var(--text-muted);
-  }
-
-  /* Sampling */
-  .sampling {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-  }
-
-  .sampling__title {
-    font-size: var(--text-h3);
-    font-weight: 600;
-  }
-
-  .sampling__body {
-    margin-top: 10px;
-    font-size: var(--text-body-md);
-  }
-
-  :global(.sampling__rule) {
-    margin-top: 24px;
-  }
-
-  /* Manifest */
-  .manifest__row {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 0.6fr;
-    gap: 20px;
-    padding: 14px 0;
-    font-size: var(--text-body-sm);
-  }
-
-  .manifest__row--divided {
-    border-top: 1px solid var(--border-hairline);
-  }
-
-  .manifest__name {
-    color: var(--text-strong);
-  }
-
-  .manifest__hash {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  .manifest__count {
-    color: var(--text-muted);
-    text-align: right;
-  }
-
-  /* Compliance */
-  .compliance__heading {
-    font-size: var(--text-h2);
-    font-weight: 700;
-    letter-spacing: var(--tracking-display);
-    max-width: 700px;
-  }
-
-  .compliance__lead {
-    margin-top: 14px;
-    font-size: var(--text-body-lg);
-    color: var(--text-body);
-    max-width: var(--measure);
-  }
-
-  .compliance {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
-
-  .compliance__title {
-    font-size: var(--text-h3);
-    font-weight: 600;
-    margin-top: 16px;
-  }
-
-  .compliance__body {
-    margin-top: 8px;
-    font-size: var(--text-body-md);
-  }
-
-  :global(.monitoring) {
-    margin-top: 18px;
-  }
-
-  .monitoring__inner {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-
-  .monitoring__inner :global(.monitoring__icon) {
-    flex: none;
-    margin-top: 3px;
-  }
-
-  .monitoring__title {
-    font-size: var(--text-h3);
-    font-weight: 600;
-  }
-
-  .monitoring__body {
-    margin-top: 8px;
-    font-size: var(--text-body-md);
-    max-width: var(--measure);
-  }
-
-  /* Responsive */
-  @media (max-width: 1000px) {
-    .method-hero__heading {
-      font-size: 40px;
-    }
-
-    .steps {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .engagement,
-    .sampling {
-      grid-template-columns: 1fr;
-      gap: 34px;
-    }
-  }
-
-  @media (max-width: 700px) {
-    .method-hero__heading {
-      font-size: 34px;
-    }
-
-    .steps,
-    .compliance {
-      grid-template-columns: 1fr;
-    }
-
-    .manifest__row {
-      grid-template-columns: 1fr;
-      gap: 4px;
-    }
-
-    .manifest__count {
-      text-align: left;
-    }
-  }
-</style>

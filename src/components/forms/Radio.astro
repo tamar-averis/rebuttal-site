@@ -16,11 +16,74 @@ const { label, description, name, value, id = `${name}-${value}`, checked = fals
 
 <label class:list={['choice', className]} for={id} style={disabled ? 'opacity:.5;cursor:default' : undefined}>
   <input class="choice__native" type="radio" id={id} name={name} value={value} checked={checked} disabled={disabled} />
-  <span class="choice__box choice__box--radio">
-    <span class="choice__mark" aria-hidden="true"></span>
+  <span class="choice__box" aria-hidden="true">
+    <span class="choice__dot"></span>
   </span>
   <span>
     <span class="choice__label">{label}</span>
     {description && <span class="choice__description">{description}</span>}
   </span>
 </label>
+
+<style>
+  .choice {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+
+  .choice__native {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .choice__box {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--dur-fast) var(--ease-standard);
+  }
+
+  .choice__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold-deep);
+    opacity: 0;
+    transition: opacity var(--dur-fast) var(--ease-standard);
+  }
+
+  .choice__native:checked ~ .choice__box {
+    border-color: var(--fg);
+  }
+
+  .choice__native:checked ~ .choice__box .choice__dot {
+    opacity: 1;
+  }
+
+  .choice__native:focus-visible ~ .choice__box {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+
+  .choice__label {
+    font-size: 16px;
+    color: var(--fg);
+    display: block;
+  }
+
+  .choice__description {
+    font-size: 14px;
+    color: var(--fg-muted);
+    display: block;
+  }
+</style>

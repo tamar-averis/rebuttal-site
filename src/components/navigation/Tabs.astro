@@ -91,62 +91,50 @@ const panels = new Map(
   .tabs__bar {
     display: flex;
     gap: 26px;
-    border-bottom: 1px solid var(--border-hairline);
-    font-family: var(--font-ui);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-sans);
   }
 
   .tabs--dark .tabs__bar {
-    border-bottom-color: var(--border-on-inverse);
+    border-bottom-color: var(--border-on-inverse, var(--border));
   }
 
   .tabs__tab {
     border: 0;
     background: none;
     cursor: pointer;
+    height: 48px;
     padding: 0 0 12px;
     position: relative;
     font-family: inherit;
-    font-size: var(--text-body-md);
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: color var(--duration-base) var(--ease-standard);
+    font-stretch: var(--stretch-semiexpanded);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fg-muted);
+    border-bottom: 2px solid transparent;
+    transition: color var(--dur-fast) var(--ease-standard);
   }
 
   .tabs--dark .tabs__tab {
-    color: var(--text-on-inverse-mute);
+    color: var(--text-on-inverse-mute, var(--fg-muted));
   }
 
   .tabs__tab.is-active {
-    font-weight: 600;
-    color: var(--text-heading);
+    color: var(--fg);
+    border-bottom-color: var(--accent-graphic);
   }
 
   .tabs--dark .tabs__tab.is-active {
-    color: var(--text-on-inverse);
+    color: var(--text-on-inverse, var(--fg));
   }
 
   .tabs__count {
     margin-left: 7px;
-    font-size: var(--text-caption);
-    color: var(--text-faint);
+    font-size: 13px;
+    color: var(--fg-muted);
   }
 
   .tabs__rule {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 3px;
-    border-radius: var(--radius-xs);
-    background: var(--accent-line-on-light);
-    opacity: 0;
-  }
-
-  .tabs--dark .tabs__rule {
-    background: var(--accent-line);
-  }
-
-  .tabs__tab.is-active .tabs__rule {
-    opacity: 1;
+    display: none;
   }
 </style>

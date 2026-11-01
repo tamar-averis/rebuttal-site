@@ -1,66 +1,109 @@
 :root{
-  /* Base palette — from Averis Brand Guidelines v1 §04, reused as-is for Rebuttal */
-  --rebuttal-harbor-green:#16473F;
-  --rebuttal-pine:#1E5A4E;
-  --rebuttal-deep-pine:#0F3630;
-  --rebuttal-champagne:#E4C58A;
-  --rebuttal-champagne-deep:#C79A4E;
-  --rebuttal-bone:#F5F2EB;
-  --rebuttal-sand:#E7E0D2;
-  --rebuttal-charcoal:#1D211F;
-  /* Extended neutrals (derived from the guidelines document's own greys) */
-  --rebuttal-slate:#3F4A45;
-  --rebuttal-slate-mid:#4A544E;
-  --rebuttal-slate-light:#7A847E;
-  --rebuttal-mist:#8A948E;
-  --rebuttal-page:#EDEEEA;
-  --rebuttal-white:#FFFFFF;
-  --rebuttal-green-on-dark-sub:#CCD8D2;
-  --rebuttal-green-on-dark-mute:#8FA39B;
+/* Brand palette (from the Panther brief) */
+--rebuttal-green:#173F35;
+--cream:#F4EFE6;
+--gold:#C9A35B;
+--gold-deep:#A8843E;
+--gold-tagline:#8A6A2B;
+--night:#0E1F1A;
+--white:#FFFFFF;
 
-  /* Semantic surfaces */
-  --surface-page:var(--rebuttal-page);
-  --surface-card:var(--rebuttal-white);
-  --surface-raised:var(--rebuttal-bone);
-  --surface-neutral:var(--rebuttal-sand);
-  --surface-inverse:var(--rebuttal-harbor-green);
-  --surface-inverse-deep:var(--rebuttal-deep-pine);
+/* Green ramp (derived; UI density only) */
+--green-50:#E8EFEB;
+--green-100:#C9DBD2;
+--green-200:#98B8A9;
+--green-300:#5F8A78;
+--green-400:#2F5F50;
+--green-500:#173F35;
+--green-600:#133429;
+--green-700:#102A23;
+--green-800:#0E1F1A;
+--green-900:#08130F;
 
-  /* Semantic text */
-  --text-heading:var(--rebuttal-harbor-green);
-  --text-body:var(--rebuttal-slate);
-  --text-strong:var(--rebuttal-charcoal);
-  --text-muted:var(--rebuttal-slate-light);
-  --text-faint:var(--rebuttal-mist);
-  --text-eyebrow:var(--rebuttal-pine);
-  --text-on-inverse:var(--rebuttal-bone);
-  --text-on-inverse-sub:var(--rebuttal-green-on-dark-sub);
-  --text-on-inverse-mute:var(--rebuttal-green-on-dark-mute);
-  --text-accent:var(--rebuttal-champagne-deep);
-  --text-accent-on-dark:var(--rebuttal-champagne);
+/* Cream ramp */
+--cream-50:#FAF7F1;
+--cream-100:#F4EFE6;
+--cream-200:#E8E0D1;
+--cream-300:#D4C8B2;
+--cream-400:#A89C85;
+--cream-500:#6E6553;
+--cream-600:#3E392E;
 
-  /* Semantic accents & lines */
-  --accent-line:var(--rebuttal-champagne);
-  --accent-line-on-light:var(--rebuttal-champagne-deep);
-  --border-hairline:rgba(22,71,63,.10);
-  --border-soft:rgba(22,71,63,.14);
-  --border-strong:rgba(22,71,63,.30);
-  --border-on-inverse:rgba(245,242,235,.18);
-  --tint-green-05:rgba(22,71,63,.05);
-  --tint-green-03:rgba(22,71,63,.03);
-  --tint-champagne-16:rgba(228,197,138,.16);
+/* Gold ramp */
+--gold-100:#F3E7CC;
+--gold-300:#DDBF85;
+--gold-500:#C9A35B;
+--gold-600:#A8843E;
+--gold-700:#8A6A2B;
 
-  /* Semantic status — muted, never alarmist. Red is reserved for destructive UI only. */
-  --status-proven:var(--rebuttal-harbor-green);
-  --status-review:var(--rebuttal-champagne-deep);
-  --status-neutral:var(--rebuttal-slate-light);
-  --status-critical:#B4573A;
-  --status-critical-tint:rgba(199,90,60,.05);
-  --status-critical-border:rgba(199,90,60,.18);
+/* Status (system additions; restrained, never alarm red) */
+--rust:#A4472F;
+--rust-bg:#F6E6E0;
+--rust-on-dark:#E79A84;
 
-  /* Interaction */
-  --interactive-primary:var(--rebuttal-harbor-green);
-  --interactive-primary-hover:var(--rebuttal-pine);
-  --interactive-primary-active:var(--rebuttal-deep-pine);
-  --focus-ring:var(--rebuttal-champagne-deep);
+/* Semantic — light (cream page) */
+--bg:var(--cream);
+--bg-raised:var(--cream-50);
+--bg-sunken:var(--cream-200);
+--surface:var(--white);
+--fg:var(--rebuttal-green);
+--fg-strong:var(--night);
+--fg-muted:var(--cream-500);
+--fg-subtle:var(--cream-400);
+--fg-on-gold:var(--rebuttal-green);
+--fg-accent:var(--gold-tagline);
+--border:var(--cream-200);
+--border-strong:var(--cream-300);
+--accent:var(--gold);
+--accent-hover:var(--gold-300);
+--accent-graphic:var(--gold-deep);
+--accent-bg:var(--gold-100);
+--success:var(--green-400);
+--success-bg:var(--green-50);
+--risk:var(--rust);
+--risk-bg:var(--rust-bg);
+--focus-ring:var(--rebuttal-green);
+--highlight-line:rgba(201,163,91,0.22);
+}
+/* Dark — Rebuttal Green. Apply data-theme="green" or .on-green */
+[data-theme="green"],.on-green{
+--bg:var(--rebuttal-green);
+--bg-raised:var(--green-600);
+--bg-sunken:var(--night);
+--surface:var(--green-700);
+--fg:var(--cream);
+--fg-strong:var(--cream-50);
+--fg-muted:#CFC8B8;
+--fg-subtle:#A9B5AC;
+--fg-accent:var(--gold);
+--border:var(--green-400);
+--border-strong:var(--green-300);
+--accent-graphic:var(--gold);
+--accent-bg:rgba(201,163,91,0.14);
+--success:var(--green-100);
+--success-bg:rgba(201,219,210,0.10);
+--risk:var(--rust-on-dark);
+--risk-bg:rgba(231,154,132,0.12);
+--focus-ring:var(--cream);
+--highlight-line:rgba(201,163,91,0.18);
+color:var(--fg);background:var(--bg);
+}
+[data-theme="night"],.on-night{
+--bg:var(--night);
+--bg-raised:var(--green-700);
+--bg-sunken:var(--green-900);
+--surface:var(--green-600);
+--fg:var(--cream);
+--fg-strong:var(--cream-50);
+--fg-muted:#CFC8B8;
+--fg-subtle:#A9B5AC;
+--fg-accent:var(--gold);
+--border:var(--green-400);
+--border-strong:var(--green-300);
+--accent-graphic:var(--gold);
+--accent-bg:rgba(201,163,91,0.14);
+--risk:var(--rust-on-dark);
+--risk-bg:rgba(231,154,132,0.12);
+--focus-ring:var(--cream);
+color:var(--fg);background:var(--bg);
 }

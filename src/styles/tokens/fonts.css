@@ -1,2 +1,2 @@
-/* Archivo + Inter, SIL OFL, served from Google Fonts (as specified in the Rebuttal brand guidelines). */
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+/* Archivo (variable width + weight) from Google Fonts. wdth 125 = Expanded, 112.5 = SemiExpanded. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap');

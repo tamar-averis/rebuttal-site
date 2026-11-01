@@ -1,0 +1,17 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  wide?: boolean;
+}
+
+const { eyebrow, title, wide = false } = Astro.props;
+---
+
+<section class="rb-phero grain" data-theme="green">
+  <div class="rb-wrap rb-phero-inner">
+    {eyebrow && <div class="eyebrow">{eyebrow}</div>}
+    <h1 class:list={['display', 'rb-h1', wide && 'wide']}>{title}</h1>
+    <slot />
+  </div>
+</section>

@@ -1,60 +1,33 @@
 ---
 interface Props {
-  variant?: 'primary' | 'reversed';
-  /** Adds the "Healthcare Claims Analysis" category line beneath. */
-  descriptor?: boolean;
+  /** Which surface the logo sits on — picks the cream-on-green or green-on-white lockup. */
+  tone?: 'green' | 'white';
   /** Rendered height in px; width scales from it automatically. */
   height?: number;
-  /** Renders only the mountain mark (favicon / avatar use). */
+  /** Renders only the claw mark (favicon / avatar use). */
   markOnly?: boolean;
   class?: string;
+  style?: string;
 }
 
-const { variant = 'primary', descriptor = false, height = 34, markOnly = false, class: className } = Astro.props;
+const { tone = 'green', height = 34, markOnly = false, class: className, style } = Astro.props;
 
-const dark = variant === 'reversed';
-
-// Full lockup is cropped to 728x116; the mark-only symbol is cropped to 58x48.
-const ratio = markOnly ? 58 / 48 : 728 / 116;
-const src = markOnly
-  ? dark
-    ? '/assets/mark-reversed.svg'
-    : '/assets/mark-primary.svg'
-  : dark
-    ? '/assets/logo-reversed.svg'
-    : '/assets/logo-primary.svg';
+// Full lockup is cropped to 776.4x198; the mark-only symbol is cropped to 64x64.
+const ratio = markOnly ? 1 : 776.4 / 198;
+const src = markOnly ? `/assets/symbol-on-${tone}.svg` : `/assets/logo-on-${tone}.svg`;
 ---
 
-<span class:list={['logo', descriptor && 'logo--stacked', className]}>
-  <img src={src} alt={markOnly ? '' : 'Rebuttal'} height={height} width={height * ratio} class="logo__img" />
-  {descriptor && !markOnly && <span class:list={['logo__descriptor', dark && 'logo__descriptor--reversed']}>Healthcare Claims Analysis</span>}
-</span>
+<img
+  src={src}
+  alt={markOnly ? '' : 'Rebuttal'}
+  height={height}
+  width={height * ratio}
+  class:list={['logo', className]}
+  style={style}
+/>
 
 <style>
   .logo {
-    display: inline-flex;
-  }
-
-  .logo--stacked {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .logo__img {
     display: block;
-  }
-
-  .logo__descriptor {
-    font-family: var(--font-ui);
-    font-weight: 600;
-    font-size: var(--text-nano);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-catline);
-    color: #6a7c74;
-  }
-
-  .logo__descriptor--reversed {
-    color: var(--text-on-inverse-mute);
   }
 </style>

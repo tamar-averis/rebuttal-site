@@ -2,10 +2,9 @@
 @import './tokens/colors.css';
 @import './tokens/typography.css';
 @import './tokens/spacing.css';
-@import './tokens/radius.css';
-@import './tokens/elevation.css';
-@import './tokens/motion.css';
+@import './tokens/effects.css';
 @import './forms.css';
+@import './site.css';
 
 *,
 *::before,
@@ -19,35 +18,145 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-ui);
-  font-size: var(--text-body-md);
-  color: var(--text-body);
-  background: var(--surface-card);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
   line-height: var(--leading-body);
+  color: var(--fg);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  color: var(--text-heading);
-  text-decoration: none;
-  transition: color var(--duration-base) var(--ease-standard);
-}
-
-a:hover {
-  color: var(--rebuttal-pine);
+.display,
+.hero-title {
+  font-family: var(--font-display);
+  font-stretch: var(--stretch-expanded);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  text-wrap: balance;
 }
 
 h1,
-h2,
-h3,
-h4 {
-  margin: 0;
+.h1 {
   font-family: var(--font-display);
-  color: var(--text-heading);
+  font-stretch: var(--stretch-expanded);
+  font-weight: 900;
+  font-size: var(--text-h1);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h2,
+.h2 {
+  font-family: var(--font-sans);
+  font-stretch: var(--stretch-semiexpanded);
+  font-weight: 600;
+  font-size: var(--text-h2);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+  text-wrap: balance;
+}
+
+h3,
+.h3 {
+  font-family: var(--font-sans);
+  font-stretch: var(--stretch-semiexpanded);
+  font-weight: 600;
+  font-size: var(--text-h3);
+  line-height: var(--leading-snug);
+  margin: 0;
+}
+
+h4,
+.h4 {
+  font-family: var(--font-sans);
+  font-stretch: var(--stretch-semiexpanded);
+  font-weight: 600;
+  font-size: var(--text-h4);
+  line-height: var(--leading-snug);
+  margin: 0;
 }
 
 p {
   margin: 0;
+  text-wrap: pretty;
+}
+
+.tagline {
+  font-family: var(--font-sans);
+  font-stretch: var(--stretch-semiexpanded);
+  font-weight: 600;
+  font-size: var(--text-lead);
+  line-height: var(--leading-snug);
+}
+
+.lead {
+  font-size: var(--text-lead);
+  line-height: var(--leading-body);
+}
+
+.small {
+  font-size: var(--text-caption);
+  color: var(--fg-muted);
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-stretch: var(--stretch-semiexpanded);
+  font-weight: 600;
+  font-size: var(--text-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--fg-accent);
+}
+
+.mono,
+code,
+kbd {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0.01em;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-stretch: var(--stretch-expanded);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: var(--grain-opacity);
+  pointer-events: none;
+  z-index: -1;
+  mix-blend-mode: screen;
+}
+
+a {
+  color: var(--fg-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--fg);
 }
 
 /* Components that set display (the contact success panel, toasts) would otherwise
@@ -56,36 +165,20 @@ p {
   display: none !important;
 }
 
-/* Focus is always the champagne ring, never the browser default. */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
+::selection {
+  background: var(--gold);
+  color: var(--rebuttal-green);
+}
+
 .wrap {
-  max-width: var(--site-max);
+  max-width: var(--content-max);
   margin: 0 auto;
-  padding: 0 40px;
-}
-
-/* The affirmation underline on a headline. Implemented as a background gradient
-   so it survives text wrapping; an absolutely positioned bar would need
-   white-space: nowrap and blow out its grid track. */
-.affirm-underline {
-  background: linear-gradient(var(--accent-line), var(--accent-line)) 0 100% / 100% 6px no-repeat;
-  padding-bottom: 8px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-
-.affirm-underline--light {
-  background-image: linear-gradient(var(--accent-line-on-light), var(--accent-line-on-light));
-}
-
-@media (max-width: 900px) {
-  .wrap {
-    padding: 0 var(--section-pad-x-sm);
-  }
+  padding: 0 clamp(20px, 5vw, 72px);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -97,6 +190,7 @@ p {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

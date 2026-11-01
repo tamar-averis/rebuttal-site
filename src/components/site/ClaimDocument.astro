@@ -1,0 +1,42 @@
+---
+const LINES: [string, string, string][] = [
+  ['CLM-0093-221', '99285', 'Supported'],
+  ['CLM-0093-244', '99284', 'Supported'],
+  ['CLM-0094-018', '99215', 'In review'],
+  ['CLM-0094-102', 'J18.9', 'Supported'],
+  ['CLM-0094-311', '99223', 'Disputed'],
+  ['CLM-0095-007', '99291', 'Supported'],
+  ['CLM-0095-019', '99214', 'Supported'],
+];
+---
+
+<div class="rb-doc-stage" aria-hidden="true">
+  <svg class="rb-claw" viewBox="0 0 54 100" preserveAspectRatio="xMidYMid meet">
+    <path
+      d="M14 0 C38 4 54 24 54 54 C54 74 48 88 38 100 C40 84 40 70 36 58 C30 42 18 30 0 24 Z"
+      fill="#C9A35B"
+    />
+  </svg>
+  <div class="rb-doc">
+    <div class="rb-doc-head">
+      <span>COMMERCIAL PAYER &middot; 2021&ndash;2023</span>
+      <span>ANONYMIZED</span>
+    </div>
+    <div class="rb-doc-meta">
+      <div><span class="k">Lines cited by payer</span><span class="v">6,140</span></div>
+      <div><span class="k">Supported on the record</span><span class="v">5,918</span></div>
+    </div>
+    <div class="rb-doc-rows">
+      {
+        LINES.map(([id, code, disposition]) => (
+          <div class:list={['rb-row', id === 'CLM-0095-007' && 'lit']}>
+            <span>{id}</span>
+            <span>{code}</span>
+            <span style="text-align:right">{disposition}</span>
+          </div>
+        ))
+      }
+    </div>
+    <div class="rb-note"><b>CLM-0095-007</b>Critical care, 30&ndash;74 min. Duration recorded in flowsheet.</div>
+  </div>
+</div>
