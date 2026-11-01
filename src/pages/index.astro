@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import CtaBand from '../components/site/CtaBand.astro';
 import ClaimDocument from '../components/site/ClaimDocument.astro';
 import Button from '../components/core/Button.astro';
-import Tag from '../components/core/Tag.astro';
+import Icon from '../components/core/Icon.astro';
 
 const GLANCE: [string, string, boolean?][] = [
   ['Claim lines in the extract', '1,412,908'],
@@ -20,25 +20,30 @@ const PILLARS: [string, string][] = [
 
 const STATS: [string, string, boolean?][] = [
   ['1M+', 'Claim lines reviewed'],
-  ['60 days', 'To file rebuttal'],
   ['$100M+', 'Largest exposure defended', true],
 ];
 
-const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'Defense counsel', 'Compliance teams'];
+const AUDIENCE: [string, string][] = [
+  ['database', 'Health systems'],
+  ['file-text', 'Physician groups'],
+  ['shield-check', 'Behavioral health'],
+  ['scale', 'Defense counsel'],
+  ['line-chart', 'Compliance teams'],
+];
 ---
 
 <Base
-  title="Rebuttal, We prove you were right."
+  title="Rebuttal, Every clawback deserves a rebuttal."
   description="Rebuttal analyzes healthcare claims data at scale to build the evidence that defends providers against payer overpayment allegations."
   page="home"
 >
   <section class="rb-phero grain" data-theme="green">
     <div class="rb-wrap rb-hero-grid">
       <div>
-        <h1 class="display rb-h1" style="margin-top:0">Payers are not the only ones with claws.</h1>
+        <h1 class="display rb-h1" style="margin-top:0">Every clawback deserves a rebuttal.</h1>
         <p class="rb-sub">
           When a payer alleges overpayment, we analyze the full claims record and build the evidence your attorneys
-          file. We prove you were right.
+          file.
         </p>
         <div class="rb-ctas">
           <Button size="lg" href="/contact">Request an analysis</Button>
@@ -106,23 +111,55 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
         We do not take payer engagements. Health systems, physician groups, and the law firms defending them are the
         whole of our practice.
       </p>
-      <div class="rb-tags">{AUDIENCE.map((t) => <Tag>{t}</Tag>)}</div>
-    </div>
-  </section>
-
-  <section class="rb-sec grain" data-theme="night">
-    <div class="rb-wrap">
-      <blockquote style="margin:0">
-        <p class="rb-quote">
-          &ldquo;The extrapolation collapsed once the full population was on the table. Rebuttal put the record in
-          front of us in a form we could file.&rdquo;
-        </p>
-        <footer class="rb-cite">
-          Partner, healthcare regulatory practice<small>Sample attribution, replace with an approved client quote.</small>
-        </footer>
-      </blockquote>
+      <div class="rb-audience">
+        {
+          AUDIENCE.map(([icon, label]) => (
+            <div class="rb-audience-card">
+              <Icon name={icon} size={22} color="var(--gold-deep)" />
+              <span>{label}</span>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </section>
 
   <CtaBand title="Every clawback deserves a rebuttal." sub="Send us the allegation letter. We will tell you what the data says." />
 </Base>
+
+<style>
+  .rb-audience {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 32px;
+  }
+
+  .rb-audience-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .rb-audience-card span {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+  }
+
+  @media (max-width: 900px) {
+    .rb-audience {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .rb-audience {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
