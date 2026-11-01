@@ -39,7 +39,7 @@ body{background:var(--night)}
 .rb-glance-row .v{font-variant-numeric:tabular-nums lining-nums;font-size:22px;color:var(--cream);font-weight:500}
 .rb-glance-row.lit{border-bottom:0;margin:6px -12px 0;padding:18px 12px;border-left:2px solid var(--gold);background:rgba(201,163,91,.14);color:var(--cream)}
 .rb-glance-row.lit .v{color:var(--gold);font-family:var(--font-display);font-stretch:var(--stretch-expanded);font-weight:900;font-size:30px}
-.rb-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.rb-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .rb-stat{border-top:1px solid var(--green-400);padding-top:24px}
 .rb-stat .rb-num{font-size:clamp(44px,5vw,72px);color:var(--cream)}
 .rb-stat .rb-num.gold{color:var(--gold)}

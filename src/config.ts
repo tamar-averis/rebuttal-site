@@ -4,10 +4,8 @@
  * from inside HubSpot, not from this site. HubSpot will sign a BAA, but ours is
  * not signed yet, so the no-PHI notice under the form stays until it is. The
  * secure channel promised at intake is separate either way. */
-// PLACEHOLDER — this HubSpot portal/form does not exist yet. Create a
-// Rebuttal HubSpot account and form, then replace these three values.
-export const HUBSPOT_PORTAL_ID = 'PLACEHOLDER_PORTAL_ID';
-export const HUBSPOT_FORM_ID = 'PLACEHOLDER_FORM_ID';
+export const HUBSPOT_PORTAL_ID = '247601150';
+export const HUBSPOT_FORM_ID = '20276dfe-70c8-4015-9049-68224c8993ee';
 export const HUBSPOT_REGION = 'na2';
 
 export const INBOX = 'info@rebuttal.health';
