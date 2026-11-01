@@ -52,22 +52,20 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
   <div class="hero">
     <div class="hero__glow" aria-hidden="true"></div>
     <div class="wrap hero__inner">
-      <Eyebrow tone="dark">Healthcare Claims Analysis</Eyebrow>
-      <h1 class="hero__heading">
-        When a payer alleges overpayment,<br />
-        <span class="affirm-underline">payers are not the only ones with claws.</span>
-      </h1>
-      <p class="hero__lead">
-        Rebuttal analyzes claims data at scale to build the evidence that stands up in audit and appeal, working
-        alongside your attorneys, on your side of the record.
-      </p>
-      <div class="hero__actions">
-        <Button variant="inverse" size="lg" href="/contact">Request an analysis</Button>
-        <Button variant="ghost" size="lg" href="/how-it-works" class="hero__ghost">
-          How it works
-          <Icon slot="icon-right" name="arrow-right" size={15} />
-        </Button>
+      <div>
+        <h1 class="hero__heading">
+          Every clawback deserves <span class="hero__underline">a rebuttal.</span>
+        </h1>
+        <p class="hero__lead">
+          When a payer alleges overpayment, we analyze the full claims record and build the evidence your attorneys
+          file. We prove you were right.
+        </p>
+        <div class="hero__actions">
+          <Button variant="inverse" size="lg" href="/contact">Request an analysis</Button>
+          <Button variant="ghost" size="lg" href="/how-it-works" class="hero__ghost">How it works</Button>
+        </div>
       </div>
+      <img src="/assets/mark-reversed.svg" alt="" class="hero__symbol" />
     </div>
   </div>
 
@@ -176,19 +174,22 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
     position: absolute;
     right: -160px;
     bottom: -200px;
-    width: 520px;
-    height: 520px;
+    width: 620px;
+    height: 620px;
     border-radius: 50%;
     background: radial-gradient(circle, var(--tint-champagne-16), transparent 66%);
   }
 
   .hero__inner {
     position: relative;
-    padding: 104px 40px 92px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 64px;
+    align-items: center;
+    padding: 112px 40px 104px;
   }
 
   .hero__heading {
-    margin-top: 18px;
     font-size: var(--text-display-2);
     font-weight: 800;
     line-height: 1.04;
@@ -197,8 +198,24 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
     max-width: 680px;
   }
 
+  .hero__underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hero__underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: -10px;
+    bottom: -8px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--text-accent-on-dark);
+  }
+
   .hero__lead {
-    margin-top: 34px;
+    margin-top: 36px;
     font-size: var(--text-lead);
     color: var(--text-on-inverse-sub);
     max-width: var(--measure-narrow);
@@ -207,7 +224,7 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
   .hero__actions {
     display: flex;
     gap: 12px;
-    margin-top: 36px;
+    margin-top: 38px;
     flex-wrap: wrap;
   }
 
@@ -219,6 +236,11 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
   .hero__inner :global(.hero__ghost:hover) {
     background: rgba(245, 242, 235, 0.06);
     color: var(--text-on-inverse);
+  }
+
+  .hero__symbol {
+    width: 340px;
+    display: block;
   }
 
   /* Glance card */
@@ -393,7 +415,14 @@ const AUDIENCE = ['Health systems', 'Physician groups', 'Behavioral health', 'De
   /* Responsive */
   @media (max-width: 1000px) {
     .hero__inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
       padding: 64px var(--section-pad-x-sm) 56px;
+    }
+
+    .hero__symbol {
+      width: 160px;
+      order: -1;
     }
 
     .hero__heading {

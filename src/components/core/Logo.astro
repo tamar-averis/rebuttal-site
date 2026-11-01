@@ -14,8 +14,8 @@ const { variant = 'primary', descriptor = false, height = 34, markOnly = false, 
 
 const dark = variant === 'reversed';
 
-// Full lockup is 776.4x198; the mark-only symbol is a 64x64 square.
-const ratio = markOnly ? 1 : 776.4 / 198;
+// Full lockup is cropped to 728x116; the mark-only symbol is cropped to 58x48.
+const ratio = markOnly ? 58 / 48 : 728 / 116;
 const src = markOnly
   ? dark
     ? '/assets/mark-reversed.svg'
