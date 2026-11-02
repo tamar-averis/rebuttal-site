@@ -29,7 +29,7 @@ const NAV = [
       }
     </nav>
     <div style="display:flex;gap:8px;align-items:center">
-      <span class="rb-book"><Button size="sm" href="/contact">Request an analysis</Button></span>
+      <span class="rb-book"><Button size="sm" href="/contact">Send us the letter</Button></span>
       <span class="rb-burger">
         <button type="button" class="menu-toggle" aria-label="Open menu" data-menu-toggle>
           <Icon name="menu" size={20} class="menu-toggle__icon menu-toggle__icon--open" />
@@ -41,7 +41,7 @@ const NAV = [
   <nav class="rb-mnav" aria-label="Mobile" data-mobile-nav hidden>
     {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
     <div style="margin-top:20px" data-theme="night">
-      <Button fullWidth href="/contact">Request an analysis</Button>
+      <Button fullWidth href="/contact">Send us the letter</Button>
     </div>
   </nav>
 </header>

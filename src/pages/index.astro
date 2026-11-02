@@ -5,13 +5,6 @@ import ClaimDocument from '../components/site/ClaimDocument.astro';
 import Button from '../components/core/Button.astro';
 import Icon from '../components/core/Icon.astro';
 
-const GLANCE: [string, string, boolean?][] = [
-  ['Claim lines in the extract', '1,412,908'],
-  ['Lines cited by payer', '6,140'],
-  ['Supported on the record', '5,918'],
-  ['Demand withdrawn', '$18.6M', true],
-];
-
 const PILLARS: [string, string][] = [
   ['Every line, not the sample', 'We work from the complete extract, not the payer\u2019s sample: every line, every modifier, every remittance.'],
   ['Evidence, line by line', 'Each disputed line is traced back to the documentation that supports it, and cited.'],
@@ -19,17 +12,21 @@ const PILLARS: [string, string][] = [
 ];
 
 const STATS: [string, string, boolean?][] = [
-  ['1M+', 'Claim lines reviewed'],
-  ['50%+', 'Of recoupment demand defended away, on average'],
-  ['$100M+', 'Largest exposure defended', true],
+  ['$125M+', 'In claims analyzed', true],
+  ['675,000+', 'Claim lines analyzed'],
+  ['19', 'Payer organizations'],
 ];
 
 const AUDIENCE: [string, string][] = [
   ['database', 'Health systems'],
   ['file-text', 'Physician groups'],
   ['shield-check', 'Behavioral health'],
+  ['file-search', 'Labs'],
+  ['clock', 'Home health and hospice'],
+  ['line-chart', 'Therapy and ABA practices'],
   ['scale', 'Defense counsel'],
-  ['line-chart', 'Compliance teams'],
+  ['check', 'Billers, CPAs, and consultants'],
+  ['info', 'Compliance teams'],
 ];
 ---
 
@@ -47,10 +44,14 @@ const AUDIENCE: [string, string][] = [
           file.
         </p>
         <div class="rb-ctas">
-          <Button size="lg" href="/contact">Request an analysis</Button>
+          <Button size="lg" href="/contact">Send us the letter</Button>
           <Button size="lg" variant="secondary" href="/how-it-works">How it works</Button>
         </div>
-        <p class="small" style="margin-top:28px">Built with healthcare attorneys &middot; Line-level, defensible, audit-ready</p>
+        <p class="small" style="margin-top:16px">
+          Within one business day we tell you what kind of review it is, the deadlines stated in it, and where the
+          payer&rsquo;s numbers look weak. Send it with patient details removed.
+        </p>
+        <p class="small" style="margin-top:12px">Built with healthcare attorneys &middot; Line-level, defensible, audit-ready</p>
       </div>
       <div class="rb-hero-visual"><ClaimDocument /></div>
     </div>
@@ -67,16 +68,23 @@ const AUDIENCE: [string, string][] = [
           medical necessity, and show where the sample does not carry the conclusion.
         </p>
       </div>
-      <div class="rb-glance" aria-label="One matter, at a glance">
-        <div class="rb-glance-head"><span>One matter, at a glance</span><span>Sample</span></div>
-        {
-          GLANCE.map(([k, v, lit]) => (
-            <div class:list={['rb-glance-row', lit && 'lit']}>
-              <span>{k}</span>
-              <span class="v">{v}</span>
-            </div>
-          ))
-        }
+      <div class="rb-glance" aria-label="One matter">
+        <div class="rb-glance-head"><span>One matter</span><span>Medicare recoupment</span></div>
+        <div class="rb-glance-row">
+          <span>Demanded</span>
+          <span class="v">About $4M</span>
+        </div>
+        <div class="rb-glance-row lit">
+          <span>After the first audit and appeal</span>
+          <span class="v">About $1M</span>
+        </div>
+        <p style="font-size:14px;color:#A9B5AC;margin-top:16px">
+          A Medicare recoupment, rebuilt claim by claim. Not every matter moves that far.
+        </p>
+        <p style="font-size:14px;color:#A9B5AC;margin-top:12px;padding-top:12px;border-top:1px solid var(--green-400)">
+          On the unpaid-claims side, a clinical lab&rsquo;s decade-long case against a Blue Cross plan went to trial
+          and the lab won.
+        </p>
       </div>
     </div>
     <div class="rb-wrap rb-grid3" style="margin-top:96px">
@@ -125,7 +133,7 @@ const AUDIENCE: [string, string][] = [
     </div>
   </section>
 
-  <CtaBand title="Every clawback deserves a rebuttal." sub="Send us the allegation letter. We will tell you what the data says." />
+  <CtaBand title="Every clawback deserves a rebuttal." sub="Send us the allegation letter, with patient details removed. We will tell you what the data says." />
 </Base>
 
 <style>
