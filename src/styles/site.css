@@ -84,7 +84,7 @@ body{background:var(--night)}
 .rb-compl{border-top:1px solid var(--border);padding-top:24px}
 .rb-compl p{font-size:17px;color:var(--fg-muted);margin-top:10px;line-height:1.55}
 .rb-team{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:48px}
-.rb-person-photo{position:relative;aspect-ratio:4/5;background:var(--green-700);border-radius:8px;overflow:hidden}
+.rb-person-photo{position:relative;aspect-ratio:4/5;max-width:200px;background:var(--green-700);border-radius:8px;overflow:hidden}
 .rb-person-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block;filter:saturate(.85) contrast(1.04)}
 .rb-person-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,63,53,.10),rgba(14,31,26,.32));mix-blend-mode:multiply;pointer-events:none}
 .rb-person .role{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-accent);font-weight:600;font-stretch:var(--stretch-semiexpanded);margin-top:20px}

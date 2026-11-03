@@ -23,8 +23,12 @@ const DELIVER: string[] = [
 ];
 
 const TEAM: [string, string, string, string][] = [
-  ['/assets/tamar-schapira.jpg', 'Co-founder & CEO', 'Tamar Schapira', 'Two decades in healthcare compliance and claims strategy. Tamar runs provider relationships and the practitioner calibration that grounds every AR recovery engagement.'],
-  ['/assets/nadav-bernstein.jpg', 'Co-founder, CPO & SME', 'Nadav Bernstein', 'Former engineering lead on claims analytics platforms at scale. Nadav owns the data pipeline, payer forensics tooling, and the 835/837 reconciliation engine.'],
+  ['/assets/tamar-schapira.jpg', 'Co-founder & CEO', 'Tamar Schapira', 'Entrepreneur with over a decade of compliance experience. Tamar runs provider relationships and the practitioner calibration that grounds every AR recovery engagement.'],
+  ['/assets/nadav-bernstein.jpg', 'Co-founder, CPO & SME', 'Nadav Bernstein', 'Entrepreneur with over a decade of compliance experience. Nadav owns the data pipeline, payer forensics tooling, and the 835/837 reconciliation engine.'],
+];
+
+const ADVISORS: [string, string][] = [
+  ['Karen Schapira', 'Healthcare attorney'],
 ];
 ---
 
@@ -75,6 +79,17 @@ const TEAM: [string, string, string, string][] = [
               <div class="role">{role}</div>
               <h3 class="rb-h3">{name}</h3>
               <p>{bio}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="eyebrow" style="margin-top:72px">Advisors</div>
+      <div class="rb-team" style="margin-top:28px">
+        {
+          ADVISORS.map(([name, role]) => (
+            <div class="rb-person">
+              <div class="role">{role}</div>
+              <h3 class="rb-h3">{name}</h3>
             </div>
           ))
         }
