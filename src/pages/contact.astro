@@ -38,14 +38,66 @@ import { INBOX, PHONE, CALENDAR_URL, HUBSPOT_PORTAL_ID, HUBSPOT_FORM_ID, HUBSPOT
         <div class="rb-h3" style="font-size:22px">Send us the letter</div>
         <script is:inline>
           (function () {
-            try {
-              var s = JSON.parse(localStorage.getItem('gclid') || 'null');
-              if (!s || Date.now() - s.t >= 90 * 864e5) return;
-              var url = new URL(location.href);
-              if (url.searchParams.get('gclid')) return;
-              url.searchParams.set('gclid', s.v);
-              history.replaceState(null, '', url);
-            } catch (e) {}
+            function getStoredGclid() {
+              try {
+                var s = JSON.parse(localStorage.getItem('gclid') || 'null');
+                if (s && Date.now() - s.t < 90 * 864e5) return s.v;
+              } catch (e) {}
+              return '';
+            }
+
+            // Keep the page URL itself carrying gclid (HubSpot reads the page
+            // context on submit), and also try to populate an actual hidden
+            // field named gclid on the rendered form, in case the portal maps
+            // one. Harmless either way: HubSpot silently drops fields with no
+            // matching property instead of rejecting the submission.
+            var gclid = getStoredGclid();
+            if (gclid) {
+              try {
+                var url = new URL(location.href);
+                if (!url.searchParams.get('gclid')) {
+                  url.searchParams.set('gclid', gclid);
+                  history.replaceState(null, '', url);
+                }
+              } catch (e) {}
+            }
+
+            window.addEventListener('message', function (event) {
+              if (!event.data || event.data.type !== 'hsFormCallback') return;
+
+              if (event.data.eventName === 'onFormReady' && gclid) {
+                var frame = document.querySelector('.hs-form-frame');
+                var form = frame && frame.querySelector('form');
+                if (form && !form.querySelector('input[name="gclid"]')) {
+                  var input = document.createElement('input');
+                  input.type = 'hidden';
+                  input.name = 'gclid';
+                  input.value = gclid;
+                  form.appendChild(input);
+                }
+              }
+
+              if (event.data.eventName === 'onFormSubmitted') {
+                // Never forward raw submission data, only these three
+                // non-identifying fields, and only if the form actually has
+                // them under these exact internal names.
+                var raw = event.data.data;
+                var values = (raw && raw.submissionValues) || {};
+                if (Array.isArray(raw)) {
+                  raw.forEach(function (f) {
+                    if (f && f.name) values[f.name] = f.value;
+                  });
+                }
+                var payload = { event: 'analysis_request_submitted' };
+                if (values.payer_type) payload.payer_type = values.payer_type;
+                if (values.requester_role) payload.requester_role = values.requester_role;
+                if (typeof values.appeal_deadline_set !== 'undefined') {
+                  payload.appeal_deadline_set = values.appeal_deadline_set === 'true' || values.appeal_deadline_set === true;
+                }
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push(payload);
+              }
+            });
           })();
         </script>
         <script src={`https://js-na2.hsforms.net/forms/embed/${HUBSPOT_PORTAL_ID}.js`} defer is:inline></script>
