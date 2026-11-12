@@ -97,7 +97,7 @@ body{background:var(--night)}
 .rb-contact-lines{display:flex;flex-direction:column;gap:14px;margin-top:40px;font-size:18px}
 .rb-contact-lines a{color:var(--cream);text-decoration:none;display:inline-flex;align-items:center;gap:12px}
 .rb-contact-lines a:hover{text-decoration:underline}
-.rb-form{background:var(--surface);color:var(--rebuttal-green);border-radius:12px;padding:32px;box-shadow:var(--shadow-doc);display:flex;flex-direction:column;gap:18px}
+.rb-form{background:var(--white);color:var(--rebuttal-green);border-radius:12px;padding:32px;box-shadow:var(--shadow-doc);display:flex;flex-direction:column;gap:18px}
 .rb-form textarea{width:100%;min-height:120px;padding:12px 14px;font-family:var(--font-sans);font-size:17px;color:var(--rebuttal-green);background:#fff;border:1.5px solid var(--cream-300);border-radius:4px;resize:vertical;outline:none}
 .rb-form textarea:focus{border-color:var(--rebuttal-green);box-shadow:0 0 0 3px var(--gold-100)}
 .rb-form label.t{font-size:15px;font-weight:600;font-stretch:var(--stretch-semiexpanded);display:block;margin-bottom:6px}

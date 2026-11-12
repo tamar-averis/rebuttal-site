@@ -15,6 +15,9 @@ import { INBOX, PHONE, CALENDAR_URL, HUBSPOT_PORTAL_ID, HUBSPOT_FORM_ID, HUBSPOT
       <div>
         <div class="eyebrow">Contact</div>
         <h1 class="display rb-h1">Send us the allegation letter.</h1>
+        <div style="margin-top:24px">
+          <Button variant="secondary" iconLeft="calendar" href={CALENDAR_URL} target="_blank">Book a call</Button>
+        </div>
         <p class="rb-sub">
           Send it with patient details removed. We will read the letter and the sampling method, and come back with
           what we would need to test it. No cost for the first read.
@@ -25,12 +28,6 @@ import { INBOX, PHONE, CALENDAR_URL, HUBSPOT_PORTAL_ID, HUBSPOT_FORM_ID, HUBSPOT
           <span style="display:inline-flex;align-items:center;gap:12px;color:#CFC8B8">
             <Icon name="shield-check" size={20} color="var(--gold)" />HIPAA-compliant intake, BAA on request
           </span>
-        </div>
-        <div style="margin-top:48px;padding-top:28px;border-top:1px solid var(--green-400)">
-          <div class="tagline" style="font-size:20px">Prefer to talk it through first?</div>
-          <div style="margin-top:16px">
-            <Button variant="secondary" iconLeft="calendar" href={CALENDAR_URL} target="_blank">Book a call</Button>
-          </div>
         </div>
       </div>
 
