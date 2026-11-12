@@ -8,7 +8,7 @@ import Button from '../components/core/Button.astro';
 import Tabs from '../components/navigation/Tabs.astro';
 
 const STEPS: [string, string, string][] = [
-  ['01', 'Intake', 'The allegation letter, the sample, and the extrapolation method. We start where the payer started.'],
+  ['01', 'Intake', 'The allegation letter, the sample, and the extrapolation method. We start where the payor started.'],
   ['02', 'Extraction', 'Full claims, remittance, and documentation data for the audit period, the whole population, not the sample.'],
   ['03', 'Analysis', 'Line-by-line review against coding rules and clinical documentation, with every determination sourced.'],
   ['04', 'Rebuttal', 'A cited findings packet your counsel can file, plus expert support through appeal.'],
@@ -26,7 +26,7 @@ const ROWS: [string, string, string, string, string][] = [
   ['CLM-0093-244', '99284', 'Emergency, level 4', 'Supported', 'Time and MDM documented'],
   ['CLM-0094-018', '99215', 'Office, established', 'In review', 'Awaiting provider note'],
   ['CLM-0094-102', 'J18.9', 'Pneumonia, unspecified', 'Supported', 'Radiology corroborates'],
-  ['CLM-0094-311', '99223', 'Inpatient admit', 'Disputed', 'Payer cites missing history'],
+  ['CLM-0094-311', '99223', 'Inpatient admit', 'Disputed', 'Payor cites missing history'],
   ['CLM-0095-007', '99291', 'Critical care, 30\u201374 min', 'Supported', 'Duration recorded in flowsheet'],
 ];
 
@@ -47,10 +47,10 @@ const COMPLIANCE: [string, string][] = [
   ],
   [
     'Coding and billing accuracy',
-    'Documentation standards and an internal review cadence, so coding and medical necessity hold up on their own terms long before a payer asks about them.',
+    'Documentation standards and an internal review cadence, so coding and medical necessity hold up on their own terms long before a payor asks about them.',
   ],
   [
-    'Payer contract obligations',
+    'Payor contract obligations',
     'Timely filing rules, audit-response duties, and reporting requirements, tracked contract by contract so every obligation has an owner and a date.',
   ],
 ];
@@ -114,9 +114,9 @@ const COMPLIANCE: [string, string][] = [
     <div class="rb-wrap">
       <div class="eyebrow">The evidence</div>
       <h2 class="rb-h2">Here is your rebuttal.</h2>
-      <p class="rb-body">An illustrative extract from a commercial payer matter. Every determination links to its source document.</p>
+      <p class="rb-body">An illustrative extract from a commercial payor matter. Every determination links to its source document.</p>
       <div class="rb-table-wrap">
-        <div class="rb-table-meta"><span>Commercial payer</span><span>2021&ndash;2023</span><span>6,140 cited lines</span><span>Illustrative example</span></div>
+        <div class="rb-table-meta"><span>Commercial payor</span><span>2021&ndash;2023</span><span>6,140 cited lines</span><span>Illustrative example</span></div>
         <div style="padding:0 24px">
           <Tabs
             id="evidence"
@@ -189,7 +189,7 @@ const COMPLIANCE: [string, string][] = [
       <h2 class="rb-h2">The strongest rebuttal is a record that was already in order.</h2>
       <p class="rb-body">
         Defending an allegation is where we start, not where we stop. We help you put your compliance requirements
-        into practice and keep them there, holding the record to the same standard before a payer asks as we would
+        into practice and keep them there, holding the record to the same standard before a payor asks as we would
         after.
       </p>
       <div class="rb-grid2" style="margin-top:48px;gap:40px 48px">
