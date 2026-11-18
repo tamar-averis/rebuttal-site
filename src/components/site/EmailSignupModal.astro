@@ -1,0 +1,166 @@
+---
+/* Site-wide email signup popup. Appears 6s after arrival, once per 30 days
+ * (localStorage, same pattern as ConsentBanner and the Averis site's
+ * consultation modal). Native <dialog> supplies the focus trap, Escape, and
+ * backdrop — no custom a11y code needed for any of that.
+ *
+ * The close button is a plain type="button" calling dlg.close(), never a
+ * <form method="dialog">: that pattern makes GTM's form-submit trigger fire
+ * on every dismissal, inflating lead counts. */
+import Icon from '../core/Icon.astro';
+import { HUBSPOT_PORTAL_ID, HUBSPOT_REGION, HUBSPOT_EMAIL_SIGNUP_FORM_ID } from '../../config';
+---
+
+<dialog id="email-signup-modal" aria-labelledby="email-signup-title">
+  <button type="button" class="modal-close" id="email-signup-close" aria-label="Close">
+    <Icon name="x" size={18} />
+  </button>
+
+  <div id="email-signup-form-wrap">
+    <h2 id="email-signup-title" class="rb-h3">
+      Get notified when we publish new guidance on audits, appeals, and recoupment.
+    </h2>
+    <script src={`https://js-na2.hsforms.net/forms/embed/${HUBSPOT_PORTAL_ID}.js`} defer is:inline></script>
+    <div
+      class="hs-form-frame"
+      data-region={HUBSPOT_REGION}
+      data-form-id={HUBSPOT_EMAIL_SIGNUP_FORM_ID}
+      data-portal-id={HUBSPOT_PORTAL_ID}
+    >
+    </div>
+  </div>
+
+  <div id="email-signup-thanks" hidden>
+    <p class="rb-h3">Got it &mdash; we&rsquo;ll email you when new guidance is published.</p>
+  </div>
+</dialog>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'rebuttal-email-popup-seen';
+    var DELAY_MS = 6000;
+    var REMEMBER_DAYS = 30;
+
+    var dlg = document.getElementById('email-signup-modal') as HTMLDialogElement | null;
+    if (!dlg) return;
+
+    function track(payload: Record<string, unknown>) {
+      var w = window as Window & { dataLayer?: unknown[] };
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push(payload);
+    }
+
+    function alreadySeen() {
+      try {
+        var s = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        return !!s && Date.now() - s.t < REMEMBER_DAYS * 864e5;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function remember() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ t: Date.now() }));
+      } catch (e) {}
+    }
+
+    if (!alreadySeen()) {
+      setTimeout(function () {
+        if (dlg!.open) return;
+        dlg!.showModal();
+        track({ event: 'email_popup_shown' });
+      }, DELAY_MS);
+    }
+
+    document.getElementById('email-signup-close')?.addEventListener('click', function () {
+      dlg!.close();
+    });
+
+    // Native backdrop click: a click that lands on the <dialog> element
+    // itself (not its content) is a click on the backdrop area.
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg) dlg!.close();
+    });
+
+    dlg.addEventListener('close', function () {
+      remember();
+      track({ event: 'email_popup_dismissed' });
+    });
+
+    window.addEventListener('message', function (event) {
+      if (!event.data || event.data.type !== 'hsFormCallback' || event.data.eventName !== 'onFormSubmitted') return;
+      var formWrap = document.getElementById('email-signup-form-wrap');
+      var thanks = document.getElementById('email-signup-thanks');
+      if (formWrap) formWrap.hidden = true;
+      if (thanks) thanks.hidden = false;
+      track({ event: 'email_popup_submitted' });
+    });
+  })();
+</script>
+
+<style>
+  dialog#email-signup-modal {
+    width: min(420px, calc(100vw - 48px));
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    background: var(--white);
+    color: var(--rebuttal-green);
+    box-shadow: var(--shadow-doc);
+  }
+  dialog#email-signup-modal::backdrop {
+    background: rgba(14, 31, 26, 0.55);
+  }
+  dialog#email-signup-modal[open] {
+    animation: email-modal-in 0.2s var(--ease-entrance);
+  }
+  @keyframes email-modal-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    dialog#email-signup-modal[open] {
+      animation: none;
+    }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--rebuttal-green);
+    cursor: pointer;
+  }
+  .modal-close:hover {
+    background: var(--cream-200);
+  }
+
+  #email-signup-title {
+    padding-right: 28px;
+  }
+
+  .hs-form-frame {
+    margin-top: 18px;
+    min-height: 120px;
+  }
+
+  #email-signup-thanks p {
+    margin: 0;
+  }
+</style>
