@@ -27,8 +27,8 @@ const TEAM: [string, string, string, string][] = [
   ['/assets/nadav-bernstein.jpg', 'Co-founder, CPO & SME', 'Nadav Bernstein', 'Entrepreneur with over a decade of compliance experience. Nadav owns the data pipeline, payor forensics tooling, and the 835/837 reconciliation engine.'],
 ];
 
-const ADVISORS: [string, string][] = [
-  ['Karen Schapira', 'Healthcare attorney'],
+const ADVISORS: [string, string, string, string][] = [
+  ['/assets/karen-schapira.jpg', 'Healthcare Attorney', 'Karen Schapira', 'Florida healthcare attorney focused on payor disputes, representing providers through audits and appeals. Serves on Rebuttal’s advisory board.'],
 ];
 ---
 
@@ -86,10 +86,12 @@ const ADVISORS: [string, string][] = [
       <div class="eyebrow" style="margin-top:72px">Advisors</div>
       <div class="rb-team" style="margin-top:28px">
         {
-          ADVISORS.map(([name, role]) => (
+          ADVISORS.map(([photo, role, name, bio]) => (
             <div class="rb-person">
+              <div class="rb-person-photo"><img src={photo} alt="" /></div>
               <div class="role">{role}</div>
               <h3 class="rb-h3">{name}</h3>
+              <p>{bio}</p>
             </div>
           ))
         }
