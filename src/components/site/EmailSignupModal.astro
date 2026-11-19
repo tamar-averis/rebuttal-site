@@ -1,241 +1,537 @@
 ---
-/* Site-wide email signup popup. Appears 1s after arrival, once per 30 days
- * (localStorage, same pattern as ConsentBanner and the Averis site's
- * consultation modal). Native <dialog> supplies the focus trap, Escape, and
- * backdrop — no custom a11y code needed for any of that.
+/* Site-wide email signup popup, per the "Email signup popup" design
+ * handoff (high fidelity: colors, type, spacing, copy and interactions are
+ * final). Appears 800ms after arrival; never again after a successful
+ * submission, and snoozed 30 days after any dismissal.
  *
- * Styled to match the rest of the site: the same green/grain hero treatment
- * as the homepage band, gold eyebrow, Archivo display heading.
+ * Posts directly to the HubSpot Forms submission API (same pattern as the
+ * Schapira Health Law site's consult modal) rather than the cross-origin
+ * hsforms.net iframe embed used on the contact page: the iframe cannot be
+ * restyled or given custom validation/submitting/success states, which this
+ * design calls for pixel-exactly.
  *
- * The close button is a plain type="button" calling dlg.close(), never a
- * <form method="dialog">: that pattern makes GTM's form-submit trigger fire
- * on every dismissal, inflating lead counts. */
+ * Native <dialog> supplies the focus trap, Escape, backdrop and
+ * return-focus-on-close for free. The close control is a plain
+ * type="button" calling close(), never <form method="dialog">: that pattern
+ * makes GTM's form-submit trigger fire on every dismissal. */
 import Icon from '../core/Icon.astro';
-import { HUBSPOT_PORTAL_ID, HUBSPOT_REGION, HUBSPOT_EMAIL_SIGNUP_FORM_ID } from '../../config';
+import { HUBSPOT_PORTAL_ID, HUBSPOT_EMAIL_SIGNUP_FORM_ID } from '../../config';
 ---
 
-<dialog id="email-signup-modal" aria-labelledby="email-signup-title">
-  <div class="es-head grain" data-theme="green">
-    <button type="button" class="es-close" id="email-signup-close" aria-label="Close">
-      <Icon name="x" size={16} />
-    </button>
+<dialog id="email-signup-modal" aria-label="Get in touch with Rebuttal">
+  <button type="button" class="es-close" id="email-signup-close" aria-label="Close">
+    <Icon name="x" size={20} strokeWidth={1.75} />
+  </button>
 
-    <div class="es-eyebrow-row">
-      <span class="es-eyes" aria-hidden="true">
-        <Icon name="eye" size={18} />
-        <Icon name="eye" size={18} />
-      </span>
-      <span class="eyebrow" style="color:var(--gold);margin:0">Stay informed</span>
+  <div id="email-signup-view-form">
+    <div class="es-header">
+      <img src="/assets/symbol-on-white.svg" alt="Rebuttal" width="40" height="40" class="es-claw" />
+      <p class="es-eyebrow">Stay informed</p>
+      <h2 class="es-headline">Every clawback deserves a rebuttal.</h2>
+      <p class="es-body">Get notified when we publish new guidance on audits, appeals, and recoupment.</p>
     </div>
 
-    <h2 id="email-signup-title" class="es-title">
-      Get notified when we publish new guidance on audits, appeals, and recoupment.
-    </h2>
+    <form id="email-signup-form" novalidate>
+      <input type="text" name="_honey" id="email-signup-honey" class="es-honey" autocomplete="off" tabindex="-1" aria-hidden="true" />
+
+      <div class="es-field">
+        <label for="email-signup-email">Work email<span class="es-required"> *</span></label>
+        <input
+          type="email"
+          id="email-signup-email"
+          name="email"
+          autocomplete="email"
+          placeholder="name@practice.com"
+          aria-describedby="email-signup-email-error"
+        />
+        <p class="es-field-error" id="email-signup-email-error" role="alert" hidden></p>
+      </div>
+
+      <button type="submit" class="es-submit" id="email-signup-submit">Get in touch</button>
+
+      <p class="es-form-error" id="email-signup-form-error" role="alert" hidden></p>
+
+      <p class="es-privacy">*We use your email only to contact you about Rebuttal. Unsubscribe at any time.</p>
+    </form>
   </div>
 
-  <div class="es-body" id="email-signup-form-wrap">
-    <script src={`https://js-na2.hsforms.net/forms/embed/${HUBSPOT_PORTAL_ID}.js`} defer is:inline></script>
-    <div
-      class="hs-form-frame"
-      data-region={HUBSPOT_REGION}
-      data-form-id={HUBSPOT_EMAIL_SIGNUP_FORM_ID}
-      data-portal-id={HUBSPOT_PORTAL_ID}
-    >
-    </div>
-    <p class="es-microcopy">No spam. Unsubscribe anytime.</p>
-  </div>
-
-  <div class="es-body es-body--thanks" id="email-signup-thanks" hidden>
-    <div class="es-check" aria-hidden="true"><Icon name="check" size={22} /></div>
-    <p class="es-thanks-text">Got it &mdash; we&rsquo;ll email you when new guidance is published.</p>
+  <div id="email-signup-view-success" hidden>
+    <img src="/assets/symbol-on-white.svg" alt="Rebuttal" width="48" height="48" class="es-claw es-claw--lg" />
+    <h2 class="es-headline">Thank you.</h2>
+    <p class="es-body" id="email-signup-success-body"></p>
+    <button type="button" class="es-secondary" id="email-signup-done">Close</button>
   </div>
 </dialog>
 
-<script>
+<script define:vars={{ HUBSPOT_PORTAL_ID, HUBSPOT_EMAIL_SIGNUP_FORM_ID }}>
   (function () {
-    var STORAGE_KEY = 'rebuttal-email-popup-seen';
-    var DELAY_MS = 1000;
-    var REMEMBER_DAYS = 30;
+    var SNOOZE_KEY = 'rebuttal-email-popup-seen';
+    var DONE_KEY = 'rebuttal-email-popup-done';
+    var DELAY_MS = 800;
+    var SNOOZE_DAYS = 30;
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    var HS_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/' + HUBSPOT_PORTAL_ID + '/' + HUBSPOT_EMAIL_SIGNUP_FORM_ID;
 
-    var dlg = document.getElementById('email-signup-modal') as HTMLDialogElement | null;
-    if (!dlg) return;
+    var dlg = document.getElementById('email-signup-modal');
+    if (!dlg || typeof dlg.showModal !== 'function') return;
 
-    function track(payload: Record<string, unknown>) {
-      var w = window as Window & { dataLayer?: unknown[] };
-      w.dataLayer = w.dataLayer || [];
-      w.dataLayer.push(payload);
+    var formView = document.getElementById('email-signup-view-form');
+    var successView = document.getElementById('email-signup-view-success');
+    var successBody = document.getElementById('email-signup-success-body');
+    var form = document.getElementById('email-signup-form');
+    var emailInput = document.getElementById('email-signup-email');
+    var fieldError = document.getElementById('email-signup-email-error');
+    var formError = document.getElementById('email-signup-form-error');
+    var submitBtn = document.getElementById('email-signup-submit');
+    var honey = document.getElementById('email-signup-honey');
+
+    var step = 'form'; // 'form' | 'submitting' | 'success'
+    var triedSubmit = false;
+
+    function track(name) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: name });
     }
 
-    function alreadySeen() {
+    function reducedMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function snoozed() {
       try {
-        var s = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-        return !!s && Date.now() - s.t < REMEMBER_DAYS * 864e5;
+        if (localStorage.getItem(DONE_KEY) === '1') return true;
+        var s = JSON.parse(localStorage.getItem(SNOOZE_KEY) || 'null');
+        return !!s && Date.now() - s.t < SNOOZE_DAYS * 864e5;
       } catch (e) {
         return false;
       }
     }
 
-    function remember() {
+    function rememberSnooze() {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ t: Date.now() }));
+        localStorage.setItem(SNOOZE_KEY, JSON.stringify({ t: Date.now() }));
       } catch (e) {}
     }
 
-    if (!alreadySeen()) {
-      setTimeout(function () {
-        if (dlg!.open) return;
-        dlg!.showModal();
-        track({ event: 'email_popup_shown' });
-      }, DELAY_MS);
+    function rememberDone() {
+      try {
+        localStorage.setItem(DONE_KEY, '1');
+      } catch (e) {}
     }
 
-    document.getElementById('email-signup-close')?.addEventListener('click', function () {
-      dlg!.close();
+    function hubspotUtk() {
+      var m = document.cookie.match(/(^|;)\s*hubspotutk=([^;]+)/);
+      return m ? m[2] : null;
+    }
+
+    function open() {
+      if (dlg.open) return;
+      dlg.showModal();
+      track('email_popup_shown');
+    }
+
+    if (!snoozed()) setTimeout(open, DELAY_MS);
+
+    function requestClose() {
+      if (!dlg.open || step === 'submitting' || dlg.classList.contains('is-closing')) return;
+      if (reducedMotion()) {
+        finishClose();
+        return;
+      }
+      dlg.classList.add('is-closing');
+      setTimeout(finishClose, 200);
+    }
+
+    function finishClose() {
+      dlg.classList.remove('is-closing');
+      dlg.close();
+    }
+
+    document.getElementById('email-signup-close')?.addEventListener('click', requestClose);
+    document.getElementById('email-signup-done')?.addEventListener('click', requestClose);
+
+    // A click landing on the dialog element itself (not its contents) is a
+    // click on the backdrop.
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg) requestClose();
     });
 
-    // Native backdrop click: a click that lands on the <dialog> element
-    // itself (not its content) is a click on the backdrop area.
-    dlg.addEventListener('click', function (e) {
-      if (e.target === dlg) dlg!.close();
+    // Escape fires 'cancel' before 'close'; route it through the same
+    // fade-out instead of letting the dialog vanish instantly.
+    dlg.addEventListener('cancel', function (e) {
+      e.preventDefault();
+      requestClose();
     });
 
     dlg.addEventListener('close', function () {
-      remember();
-      track({ event: 'email_popup_dismissed' });
+      if (step !== 'success') rememberSnooze();
+      track('email_popup_dismissed');
+      step = 'form';
+      triedSubmit = false;
+      formView.hidden = false;
+      successView.hidden = true;
+      form.reset();
+      clearError();
     });
 
-    window.addEventListener('message', function (event) {
-      if (!event.data || event.data.type !== 'hsFormCallback' || event.data.eventName !== 'onFormSubmitted') return;
-      var formWrap = document.getElementById('email-signup-form-wrap');
-      var thanks = document.getElementById('email-signup-thanks');
-      if (formWrap) formWrap.hidden = true;
-      if (thanks) thanks.hidden = false;
-      track({ event: 'email_popup_submitted' });
+    function setError(message) {
+      fieldError.textContent = message;
+      fieldError.hidden = !message;
+      emailInput.setAttribute('aria-invalid', message ? 'true' : 'false');
+      emailInput.classList.toggle('is-invalid', !!message);
+    }
+
+    function clearError() {
+      setError('');
+      formError.hidden = true;
+    }
+
+    function validate() {
+      var value = emailInput.value.trim();
+      if (!value) {
+        setError('Enter your work email so we can reach you.');
+        return false;
+      }
+      if (!EMAIL_RE.test(value)) {
+        setError('Enter a full email address, like name@practice.com.');
+        return false;
+      }
+      setError('');
+      return true;
+    }
+
+    emailInput.addEventListener('input', function () {
+      if (triedSubmit) validate();
     });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      triedSubmit = true;
+      formError.hidden = true;
+      if (!validate()) {
+        emailInput.focus();
+        return;
+      }
+
+      var email = emailInput.value.trim();
+
+      // Honeypot: real visitors never fill a hidden field. Pretend success.
+      if (honey.value.trim() !== '') {
+        showSuccess(email);
+        return;
+      }
+
+      step = 'submitting';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending';
+
+      var payload = {
+        fields: [{ objectTypeId: '0-1', name: 'email', value: email }],
+        context: { pageUri: window.location.href, pageName: document.title },
+      };
+      var utk = hubspotUtk();
+      if (utk) payload.context.hutk = utk;
+
+      fetch(HS_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          if (res.ok) return res.json();
+          return res
+            .json()
+            .catch(function () {
+              return { status: res.status };
+            })
+            .then(function (body) {
+              return Promise.reject(body);
+            });
+        })
+        .then(function () {
+          showSuccess(email);
+        })
+        .catch(function (err) {
+          try {
+            console.error('Email signup submission failed:', err);
+          } catch (e) {}
+          step = 'form';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Get in touch';
+          formError.textContent = 'Something went wrong. Try again in a moment.';
+          formError.hidden = false;
+        });
+    });
+
+    function showSuccess(email) {
+      step = 'success';
+      track('email_popup_submitted');
+      rememberDone();
+
+      successBody.textContent = '';
+      successBody.append('We will be in touch at ');
+      var strong = document.createElement('strong');
+      strong.className = 'es-email-strong';
+      strong.textContent = email;
+      successBody.append(strong);
+      successBody.append('. We will also reach out to set up a review.');
+
+      formView.hidden = true;
+      successView.hidden = false;
+    }
   })();
 </script>
 
 <style>
   dialog#email-signup-modal {
-    width: min(440px, calc(100vw - 48px));
-    border: none;
-    border-radius: var(--radius-xl);
-    padding: 0;
-    overflow: hidden;
-    background: var(--white);
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    margin: auto;
+    border: 1px solid var(--cream-200);
+    border-radius: var(--radius-lg);
+    padding: clamp(24px, 3vw, 36px);
+    background: var(--cream);
     color: var(--rebuttal-green);
     box-shadow: var(--shadow-doc);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    font-family: var(--font-sans);
   }
+
   dialog#email-signup-modal::backdrop {
-    background: rgba(14, 31, 26, 0.55);
+    background: rgba(8, 19, 15, 0.62);
   }
-  dialog#email-signup-modal[open] {
-    animation: email-modal-in 0.2s var(--ease-entrance);
-  }
-  @keyframes email-modal-in {
+
+  @keyframes es-fade-in {
     from {
       opacity: 0;
-      transform: translateY(8px);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
     }
   }
+  @keyframes es-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  dialog#email-signup-modal[open] {
+    animation: es-fade-in 200ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  dialog#email-signup-modal.is-closing {
+    animation: es-fade-out 200ms cubic-bezier(0.2, 0.6, 0.2, 1) forwards;
+  }
   @media (prefers-reduced-motion: reduce) {
-    dialog#email-signup-modal[open] {
+    dialog#email-signup-modal[open],
+    dialog#email-signup-modal.is-closing {
       animation: none;
     }
   }
 
-  .es-head {
-    position: relative;
-    padding: 30px 32px 26px;
-  }
-
   .es-close {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border: none;
-    border-radius: var(--radius-pill);
-    background: transparent;
-    color: var(--cream);
-    cursor: pointer;
-  }
-  .es-close:hover {
-    background: rgba(245, 241, 232, 0.14);
-  }
-
-  .es-eyebrow-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .es-eyes {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    color: var(--gold);
-  }
-
-  .es-title {
-    font-family: var(--font-sans);
-    font-stretch: var(--stretch-semiexpanded);
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 1.3;
-    margin: 12px 24px 0 0;
-  }
-
-  .es-body {
-    padding: 26px 32px 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .es-body--thanks {
-    align-items: center;
-    text-align: center;
-    padding: 40px 32px 44px;
-    gap: 12px;
-  }
-
-  .es-check {
+    top: 12px;
+    right: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 44px;
     height: 44px;
-    border-radius: var(--radius-pill);
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--rebuttal-green);
+    cursor: pointer;
+  }
+  .es-close:hover {
     background: var(--gold-100);
-    color: var(--gold-700);
+  }
+  .es-close:focus-visible,
+  .es-submit:focus-visible,
+  .es-secondary:focus-visible,
+  #email-signup-email:focus-visible {
+    outline: 2px solid var(--rebuttal-green);
+    outline-offset: 2px;
   }
 
-  .es-thanks-text {
+  #email-signup-view-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .es-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-right: 32px;
+  }
+
+  .es-claw {
+    display: block;
+  }
+
+  .es-eyebrow {
+    margin: 0;
     font-family: var(--font-sans);
     font-stretch: var(--stretch-semiexpanded);
     font-weight: 600;
-    font-size: 19px;
-    line-height: 1.35;
-    margin: 0;
-    max-width: 30ch;
-  }
-
-  .hs-form-frame {
-    min-height: 110px;
-  }
-
-  .es-microcopy {
     font-size: 13px;
-    color: var(--cream-500);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--gold-tagline);
+  }
+
+  .es-headline {
     margin: 0;
+    font-family: var(--font-display);
+    font-stretch: var(--stretch-expanded);
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--rebuttal-green);
+  }
+
+  .es-body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--cream-500);
+  }
+
+  #email-signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .es-honey {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .es-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .es-field label {
+    font-family: var(--font-sans);
+    font-stretch: var(--stretch-semiexpanded);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--rebuttal-green);
+  }
+
+  .es-required {
+    color: var(--cream-500);
+  }
+
+  #email-signup-email {
+    height: 48px;
+    padding: 0 14px;
+    font-family: var(--font-sans);
+    font-size: 17px;
+    color: var(--rebuttal-green);
+    background: var(--white);
+    border: 1.5px solid var(--cream-300);
+    border-radius: 4px;
+    outline: none;
+  }
+  #email-signup-email:focus {
+    border-color: var(--rebuttal-green);
+    box-shadow: 0 0 0 3px var(--gold-100);
+  }
+  #email-signup-email.is-invalid {
+    border-color: var(--rust);
+  }
+
+  .es-field-error,
+  .es-form-error {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--rust);
+  }
+
+  .es-submit {
+    height: 52px;
+    border: none;
+    border-radius: 4px;
+    background: var(--rebuttal-green);
+    color: var(--cream);
+    font-family: var(--font-sans);
+    font-stretch: var(--stretch-semiexpanded);
+    font-weight: 600;
+    font-size: 17px;
+    cursor: pointer;
+    transition: background var(--dur-fast) var(--ease-standard);
+  }
+  .es-submit:hover:not(:disabled) {
+    background: var(--green-400);
+  }
+  .es-submit:active:not(:disabled) {
+    filter: brightness(0.94);
+  }
+  .es-submit:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .es-privacy {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--cream-500);
+  }
+
+  #email-signup-view-success {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 32px 8px 0;
+  }
+
+  .es-claw--lg {
+    margin-bottom: -4px;
+  }
+
+  .es-email-strong {
+    font-weight: 600;
+    color: var(--rebuttal-green);
+  }
+
+  .es-secondary {
+    align-self: flex-start;
+    height: 44px;
+    padding: 0 20px;
+    border: 1.5px solid var(--rebuttal-green);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--rebuttal-green);
+    font-family: var(--font-sans);
+    font-stretch: var(--stretch-semiexpanded);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .es-secondary:hover {
+    background: var(--gold-100);
   }
 </style>
