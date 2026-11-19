@@ -49,7 +49,7 @@
   "eventStatus": "https://schema.org/EventScheduled",
   "location": {
     "@type": "VirtualLocation",
-    "url": "[LINK: Zoom webinar join URL]"
+    "url": "https://us06web.zoom.us/webinar/register/WN_Fg1J7J89QCmNhE2dB10sNA"
   },
   "image": ["https://rebuttal.health/assets/webinar-og.png"],
   "organizer": {
@@ -66,7 +66,7 @@
     "price": "0",
     "priceCurrency": "USD",
     "availability": "https://schema.org/InStock",
-    "url": "https://rebuttal.health/webinar",
+    "url": "https://us06web.zoom.us/webinar/register/WN_Fg1J7J89QCmNhE2dB10sNA",
     "validFrom": "2026-11-18T00:00:00-05:00"
   }
 }
@@ -248,20 +248,8 @@
   #reg-form-error{margin:0;font-size:14px;color:var(--rust)}
   .reg-card .fine{margin-top:4px;font-size:12px;color:var(--cream-500);text-align:center}
 
-  /* ---------- Thank-you state ---------- */
-  #thanks{display:none}
-  #thanks.show{display:block}
-  #reg-form-wrap.hidden{display:none}
-  .thanks-head{display:flex;align-items:center;gap:12px}
-  .thanks-badge{
-    width:40px;height:40px;border-radius:50%;background:var(--rebuttal-green);color:var(--cream);
-    display:flex;align-items:center;justify-content:center;flex:none;font-size:20px;
-  }
-  .cal-row{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
-  .cal-row a, .cal-row button{font-size:14px}
-  .share-row{margin-top:18px}
   .readiness-line{
-    margin-top:22px;padding-top:18px;border-top:1px solid var(--cream-300);
+    margin-top:18px;padding-top:18px;border-top:1px solid var(--cream-300);
     font-size:14px;color:#3E392E;
   }
   .readiness-line a{color:var(--rebuttal-green);font-weight:700;text-decoration:underline}
@@ -337,8 +325,6 @@
   footer.site{padding:40px 0;background:var(--night);border-top:1px solid var(--green-400)}
   footer.site .foot-grid{display:flex;flex-direction:column;gap:10px;font-size:14px;color:#A9B5AC}
   footer.site a{text-decoration:underline}
-
-  .sr-announce{position:absolute;left:-9999px}
 </style>
 </head>
 <body>
@@ -390,7 +376,7 @@
         <div class="reg-card">
           <div id="reg-form-wrap">
             <h2>Register free</h2>
-            <p class="reg-sub">Takes under a minute. We&rsquo;ll email your Zoom link right after.</p>
+            <p class="reg-sub">We&rsquo;ll send you to Zoom to finish registering and get your join link.</p>
 
             <form id="reg-form" novalidate>
               <input type="text" name="_honey" id="reg-honey" class="reg-honey" autocomplete="off" tabindex="-1" aria-hidden="true" />
@@ -434,24 +420,6 @@
               Questions? Email us at
               <a href="mailto:info@rebuttal.health" style="color:var(--rebuttal-green);text-decoration:underline">info@rebuttal.health</a>.
             </p>
-          </div>
-
-          <div id="thanks" aria-live="polite">
-            <div class="thanks-head">
-              <span class="thanks-badge" aria-hidden="true">&#10003;</span>
-              <h2 style="margin:0">You&rsquo;re registered</h2>
-            </div>
-            <p class="reg-sub" style="margin-top:14px">
-              We emailed your Zoom link<span id="thanks-email"></span>. Add it to your calendar so you don&rsquo;t lose it:
-            </p>
-            <div class="cal-row">
-              <a id="cal-google" class="btn btn-md btn-secondary" style="color:var(--rebuttal-green);border-color:var(--rebuttal-green)" href="#" target="_blank" rel="noopener">Google Calendar</a>
-              <a id="cal-outlook" class="btn btn-md btn-secondary" style="color:var(--rebuttal-green);border-color:var(--rebuttal-green)" href="#" target="_blank" rel="noopener">Outlook</a>
-              <button type="button" id="cal-ics" class="btn btn-md btn-secondary" style="color:var(--rebuttal-green);border-color:var(--rebuttal-green)">Download .ics</button>
-            </div>
-            <div class="share-row">
-              <a id="share-linkedin" class="btn btn-md btn-secondary" style="color:var(--rebuttal-green);border-color:var(--rebuttal-green)" href="#" target="_blank" rel="noopener">Share on LinkedIn</a>
-            </div>
             <p class="readiness-line">
               Facing an active demand? <a href="[BOOK: Recoupment Readiness Review booking link]">Book a free 20-minute Recoupment Readiness Review</a>.
             </p>
@@ -573,13 +541,11 @@
   </div>
 </footer>
 
-<div id="sr-live" class="sr-announce" role="status" aria-live="polite"></div>
-
 <script>
 (function () {
   'use strict';
 
-  var srLive = document.getElementById('sr-live');
+  var ZOOM_REGISTER_URL = 'https://us06web.zoom.us/webinar/register/WN_Fg1J7J89QCmNhE2dB10sNA';
 
   // ---- Registration form: posts straight to the HubSpot Forms submission
   // API (same portal/form the old iframe embed used) instead of the
@@ -658,7 +624,7 @@
 
       // Honeypot: real visitors never fill a hidden field. Pretend success.
       if (honey.value.trim() !== '') {
-        showThanks(email);
+        redirectToZoom();
         return;
       }
 
@@ -701,7 +667,7 @@
         .then(function () {
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({ event: 'webinar_registration_submitted' });
-          showThanks(email);
+          redirectToZoom();
         })
         .catch(function (err) {
           try {
@@ -715,66 +681,14 @@
     });
   })();
 
-  function showThanks(email) {
-    document.getElementById('reg-form-wrap').classList.add('hidden');
-    var thanks = document.getElementById('thanks');
-    thanks.classList.add('show');
-    document.getElementById('thanks-email').textContent = email ? ' to ' + email : '';
-    srLive.textContent = 'You are registered. Your confirmation and calendar links are ready.';
-
-    // Event window: Wed Dec 16 2026, 12:00-1:00 PM ET (UTC-5, no DST in Dec)
-    var startUTC = '20261216T170000Z';
-    var endUTC = '20261216T180000Z';
-    var title = 'Audits Are Math. So Is Your Defense. (The Rebuttal Sessions, Ep. 1)';
-    var details = 'Medicare audits, appeals and the recoupment playbook, with healthcare attorney Karen Schapira. Join link: [LINK: Zoom webinar join URL]';
-    var location = '[LINK: Zoom webinar join URL]';
-
-    var gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-      + '&text=' + encodeURIComponent(title)
-      + '&dates=' + startUTC + '/' + endUTC
-      + '&details=' + encodeURIComponent(details)
-      + '&location=' + encodeURIComponent(location);
-    document.getElementById('cal-google').href = gcal;
-
-    var outlook = 'https://outlook.live.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent'
-      + '&subject=' + encodeURIComponent(title)
-      + '&startdt=2026-12-16T12:00:00-05:00'
-      + '&enddt=2026-12-16T13:00:00-05:00'
-      + '&body=' + encodeURIComponent(details)
-      + '&location=' + encodeURIComponent(location);
-    document.getElementById('cal-outlook').href = outlook;
-
-    document.getElementById('cal-ics').addEventListener('click', function () {
-      var ics = [
-        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Rebuttal//Webinar//EN',
-        'BEGIN:VEVENT',
-        'UID:rebuttal-webinar-ep1-' + Date.now() + '@rebuttal.health',
-        'DTSTAMP:' + startUTC,
-        'DTSTART:' + startUTC,
-        'DTEND:' + endUTC,
-        'SUMMARY:' + title,
-        'DESCRIPTION:' + details.replace(/,/g, '\\,'),
-        'LOCATION:' + location,
-        'END:VEVENT', 'END:VCALENDAR'
-      ].join('\r\n');
-      var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'rebuttal-webinar-dec16.ics';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
-
-    var shareText = 'I just registered for "Audits Are Math. So Is Your Defense." — a free webinar on Medicare audits, appeals and the recoupment playbook, with healthcare attorney Karen Schapira. Dec 16, 12-1 PM ET.';
-    var shareUrl = 'https://rebuttal.health/webinar';
-    document.getElementById('share-linkedin').href =
-      'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(shareUrl)
-      + '&title=' + encodeURIComponent(title)
-      + '&summary=' + encodeURIComponent(shareText);
-
-    thanks.setAttribute('tabindex', '-1');
-    thanks.focus();
+  // Hands off to Zoom's own registration page so the visitor gets their
+  // real confirmation email and personal join link from Zoom. Zoom's
+  // registration page doesn't support pre-filling via URL params, so they
+  // do retype name/email there.
+  function redirectToZoom() {
+    var btn = document.getElementById('reg-submit');
+    if (btn) btn.textContent = 'Redirecting to Zoom…';
+    window.location.href = ZOOM_REGISTER_URL;
   }
 })();
 </script>
