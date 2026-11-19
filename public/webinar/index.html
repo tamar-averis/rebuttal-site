@@ -17,14 +17,14 @@
   })(window, document, 'script', 'dataLayer', 'GTM-KDJVH2SR');
 </script>
 <!-- End Google Tag Manager -->
-<title>Denied Twice. Now What? | Free Medicare Recoupment Webinar | Rebuttal</title>
+<title>Audits Are Math. So Is Your Defense. | Free Medicare Recoupment Webinar | Rebuttal</title>
 <meta name="description" content="Free live webinar on Medicare audits, appeals and the recoupment playbook with healthcare attorney Karen Schapira. Dec 16, 2026, 12-1 PM ET." />
 <link rel="canonical" href="https://rebuttal.health/webinar" />
 <meta name="robots" content="index, follow" />
 
 <!-- Open Graph / Twitter -->
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Denied Twice. Now What? — Free Medicare Recoupment Webinar" />
+<meta property="og:title" content="Audits Are Math. So Is Your Defense. — Free Medicare Recoupment Webinar" />
 <meta property="og:description" content="Medicare audits, appeals and the recoupment playbook — with healthcare attorney Karen Schapira. Wed, Dec 16, 2026, 12-1 PM ET." />
 <meta property="og:url" content="https://rebuttal.health/webinar" />
 <!-- [PHOTO]: replace with the real 1200x627 event banner once designed -->
@@ -38,7 +38,7 @@
 {
   "@context": "https://schema.org",
   "@type": "Event",
-  "name": "Denied Twice. Now What? — The Rebuttal Sessions, Episode 1",
+  "name": "Audits Are Math. So Is Your Defense. — The Rebuttal Sessions, Episode 1",
   "description": "Medicare audits, appeals and the recoupment playbook, with healthcare attorney Karen Schapira.",
   "startDate": "2026-12-16T12:00:00-05:00",
   "endDate": "2026-12-16T13:00:00-05:00",
@@ -88,6 +88,8 @@
     --gold-300:#DDBF85;
     --gold-700:#8A6A2B;
     --white:#FFFFFF;
+    --cream-500:#6E6553;
+    --rust:#A4472F;
     --rust-on-dark:#E79A84;
     --radius-sm:4px;
     --radius-md:8px;
@@ -217,8 +219,31 @@
   .reg-card h2{color:var(--rebuttal-green);font-size:22px;text-transform:none;letter-spacing:0}
   .reg-card .reg-sub{margin-top:8px;font-size:14px;color:#3E392E}
 
-  .hs-form-frame{min-height:460px}
-  .reg-card .fine{margin-top:12px;font-size:12px;color:#6E6553;text-align:center}
+  /* ---------- Registration form ---------- */
+  #reg-form{margin-top:22px;display:flex;flex-direction:column;gap:16px}
+  .reg-row{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+  @media (min-width:480px){.reg-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .reg-field{display:flex;flex-direction:column;gap:6px}
+  .reg-field label{font-family:var(--font-sans);font-stretch:112.5%;font-weight:700;font-size:14px;color:var(--rebuttal-green)}
+  .reg-field .opt{font-weight:400;color:var(--cream-500)}
+  .reg-field .req{color:var(--cream-500)}
+  .reg-field .hint{font-size:13px;color:var(--cream-500);line-height:1.4}
+  .reg-field input, .reg-field textarea{
+    height:46px;padding:0 14px;font-family:var(--font-body);font-size:16px;
+    color:var(--rebuttal-green);background:var(--white);
+    border:1.5px solid var(--cream-300);border-radius:var(--radius-sm);outline:none;
+  }
+  .reg-field textarea{height:auto;min-height:84px;padding:12px 14px;resize:vertical;font-family:var(--font-body)}
+  .reg-field input:focus, .reg-field textarea:focus{
+    border-color:var(--rebuttal-green);box-shadow:0 0 0 3px rgba(23,63,53,0.12);
+  }
+  .reg-field input.is-invalid{border-color:var(--rust)}
+  .reg-field-error{margin:0;font-size:13px;color:var(--rust)}
+  .reg-honey{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+  #reg-submit{height:52px;width:100%;border:none}
+  #reg-submit:disabled{opacity:0.5;cursor:default}
+  #reg-form-error{margin:0;font-size:14px;color:var(--rust)}
+  .reg-card .fine{margin-top:4px;font-size:12px;color:var(--cream-500);text-align:center}
 
   /* ---------- Thank-you state ---------- */
   #thanks{display:none}
@@ -344,7 +369,7 @@
     <div class="wrap hero-grid">
       <div>
         <p class="eyebrow">The Rebuttal Sessions &middot; Episode 1</p>
-        <h1>Denied twice. Now what?</h1>
+        <h1>Audits are math. So is your defense.</h1>
         <p class="subhead">
           Medicare audits, appeals and the recoupment playbook &mdash; with healthcare attorney Karen Schapira.
         </p>
@@ -365,16 +390,46 @@
             <h2>Register free</h2>
             <p class="reg-sub">Takes under a minute. We&rsquo;ll email your Zoom link right after.</p>
 
-            <script src="https://js-na2.hsforms.net/forms/embed/247601150.js" defer></script>
-            <div
-              class="hs-form-frame"
-              data-region="na2"
-              data-form-id="899be169-3b00-410f-8503-81137c33dcc3"
-              data-portal-id="247601150"
-            ></div>
+            <form id="reg-form" novalidate>
+              <input type="text" name="_honey" id="reg-honey" class="reg-honey" autocomplete="off" tabindex="-1" aria-hidden="true" />
 
-            <p class="fine" style="margin-top:16px">
-              If the form does not load, email us at
+              <div class="reg-row">
+                <div class="reg-field">
+                  <label for="reg-firstname">First name<span class="req"> *</span></label>
+                  <input type="text" id="reg-firstname" name="firstname" autocomplete="given-name" aria-describedby="reg-firstname-error" />
+                  <p class="reg-field-error" id="reg-firstname-error" role="alert" hidden></p>
+                </div>
+                <div class="reg-field">
+                  <label for="reg-lastname">Last name<span class="req"> *</span></label>
+                  <input type="text" id="reg-lastname" name="lastname" autocomplete="family-name" aria-describedby="reg-lastname-error" />
+                  <p class="reg-field-error" id="reg-lastname-error" role="alert" hidden></p>
+                </div>
+              </div>
+
+              <div class="reg-field">
+                <label for="reg-email">Email<span class="req"> *</span></label>
+                <input type="email" id="reg-email" name="email" autocomplete="email" placeholder="name@practice.com" aria-describedby="reg-email-error" />
+                <p class="reg-field-error" id="reg-email-error" role="alert" hidden></p>
+              </div>
+
+              <div class="reg-field">
+                <label for="reg-firm">Law firm / practice name <span class="opt">(optional)</span></label>
+                <input type="text" id="reg-firm" name="law_firm__practice_name" autocomplete="organization" />
+              </div>
+
+              <div class="reg-field">
+                <label for="reg-question">What would you like Karen to address? <span class="opt">(optional)</span></label>
+                <p class="hint">Ask anything about Medicare audits, appeals or recoupment demands. Karen will answer as many as she can live. Please don&rsquo;t include patient information.</p>
+                <textarea id="reg-question" name="question"></textarea>
+              </div>
+
+              <button type="submit" id="reg-submit" class="btn btn-lg btn-primary">Save my seat</button>
+
+              <p id="reg-form-error" role="alert" hidden></p>
+            </form>
+
+            <p class="fine">
+              Questions? Email us at
               <a href="mailto:info@rebuttal.health" style="color:var(--rebuttal-green);text-decoration:underline">info@rebuttal.health</a>.
             </p>
           </div>
@@ -524,19 +579,139 @@
 
   var srLive = document.getElementById('sr-live');
 
-  // ---- HubSpot embed: reveal the thank-you state on confirmed submission ----
-  window.addEventListener('message', function (event) {
-    if (!event.data || event.data.type !== 'hsFormCallback' || event.data.eventName !== 'onFormSubmitted') return;
+  // ---- Registration form: posts straight to the HubSpot Forms submission
+  // API (same portal/form the old iframe embed used) instead of the
+  // cross-origin hsforms.net embed, so the card can be fully restyled and
+  // given real inline validation. ----
+  (function () {
+    var HS_PORTAL = '247601150';
+    var HS_FORM = '899be169-3b00-410f-8503-81137c33dcc3';
+    var HS_ENDPOINT = 'https://api.hsforms.com/submissions/v3/integration/submit/' + HS_PORTAL + '/' + HS_FORM;
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    var raw = event.data.data;
-    var values = (raw && raw.submissionValues) || {};
-    if (Array.isArray(raw)) {
-      raw.forEach(function (f) {
-        if (f && f.name) values[f.name] = f.value;
-      });
+    var form = document.getElementById('reg-form');
+    if (!form) return;
+
+    var submitBtn = document.getElementById('reg-submit');
+    var formError = document.getElementById('reg-form-error');
+    var honey = document.getElementById('reg-honey');
+    var triedSubmit = false;
+
+    var REQUIRED = [
+      { id: 'reg-firstname', empty: 'Enter your first name.' },
+      { id: 'reg-lastname', empty: 'Enter your last name.' },
+      { id: 'reg-email', empty: 'Enter your email so we can send your Zoom link.', invalid: 'Enter a full email address, like name@practice.com.' },
+    ];
+
+    function setError(input, message) {
+      var err = document.getElementById(input.id + '-error');
+      if (err) {
+        err.textContent = message;
+        err.hidden = !message;
+      }
+      input.setAttribute('aria-invalid', message ? 'true' : 'false');
+      input.classList.toggle('is-invalid', !!message);
     }
-    showThanks(values.email || '');
-  });
+
+    function validate() {
+      var ok = true;
+      REQUIRED.forEach(function (f) {
+        var input = document.getElementById(f.id);
+        var value = input.value.trim();
+        if (!value) {
+          setError(input, f.empty);
+          ok = false;
+        } else if (f.id === 'reg-email' && !EMAIL_RE.test(value)) {
+          setError(input, f.invalid);
+          ok = false;
+        } else {
+          setError(input, '');
+        }
+      });
+      return ok;
+    }
+
+    REQUIRED.forEach(function (f) {
+      document.getElementById(f.id).addEventListener('input', function () {
+        if (triedSubmit) validate();
+      });
+    });
+
+    function hubspotUtk() {
+      var m = document.cookie.match(/(^|;)\s*hubspotutk=([^;]+)/);
+      return m ? m[2] : null;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      triedSubmit = true;
+      formError.hidden = true;
+      if (!validate()) {
+        var firstInvalid = form.querySelector('.is-invalid');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      var email = document.getElementById('reg-email').value.trim();
+
+      // Honeypot: real visitors never fill a hidden field. Pretend success.
+      if (honey.value.trim() !== '') {
+        showThanks(email);
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      var fields = [
+        { objectTypeId: '0-1', name: 'firstname', value: document.getElementById('reg-firstname').value.trim() },
+        { objectTypeId: '0-1', name: 'lastname', value: document.getElementById('reg-lastname').value.trim() },
+        { objectTypeId: '0-1', name: 'email', value: email },
+      ];
+      var firm = document.getElementById('reg-firm').value.trim();
+      if (firm) fields.push({ objectTypeId: '0-1', name: 'law_firm__practice_name', value: firm });
+      var question = document.getElementById('reg-question').value.trim();
+      if (question) fields.push({ objectTypeId: '0-1', name: 'question', value: question });
+
+      var payload = {
+        fields: fields,
+        context: { pageUri: window.location.href, pageName: document.title },
+      };
+      var utk = hubspotUtk();
+      if (utk) payload.context.hutk = utk;
+
+      fetch(HS_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          if (res.ok) return res.json();
+          return res
+            .json()
+            .catch(function () {
+              return { status: res.status };
+            })
+            .then(function (body) {
+              return Promise.reject(body);
+            });
+        })
+        .then(function () {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: 'webinar_registration_submitted' });
+          showThanks(email);
+        })
+        .catch(function (err) {
+          try {
+            console.error('Webinar registration failed:', err);
+          } catch (e) {}
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Save my seat';
+          formError.textContent = 'Something went wrong. Please try again, or email info@rebuttal.health.';
+          formError.hidden = false;
+        });
+    });
+  })();
 
   function showThanks(email) {
     document.getElementById('reg-form-wrap').classList.add('hidden');
@@ -548,7 +723,7 @@
     // Event window: Wed Dec 16 2026, 12:00-1:00 PM ET (UTC-5, no DST in Dec)
     var startUTC = '20261216T170000Z';
     var endUTC = '20261216T180000Z';
-    var title = 'Denied Twice. Now What? (The Rebuttal Sessions, Ep. 1)';
+    var title = 'Audits Are Math. So Is Your Defense. (The Rebuttal Sessions, Ep. 1)';
     var details = 'Medicare audits, appeals and the recoupment playbook, with healthcare attorney Karen Schapira. Join link: [LINK: Zoom webinar join URL]';
     var location = '[LINK: Zoom webinar join URL]';
 
@@ -589,7 +764,7 @@
       document.body.removeChild(a);
     });
 
-    var shareText = 'I just registered for "Denied Twice. Now What?" — a free webinar on Medicare audits, appeals and the recoupment playbook, with healthcare attorney Karen Schapira. Dec 16, 12-1 PM ET.';
+    var shareText = 'I just registered for "Audits Are Math. So Is Your Defense." — a free webinar on Medicare audits, appeals and the recoupment playbook, with healthcare attorney Karen Schapira. Dec 16, 12-1 PM ET.';
     var shareUrl = 'https://rebuttal.health/webinar';
     document.getElementById('share-linkedin').href =
       'https://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(shareUrl)
