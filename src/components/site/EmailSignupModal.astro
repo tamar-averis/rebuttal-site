@@ -284,6 +284,8 @@ import { HUBSPOT_PORTAL_ID, HUBSPOT_EMAIL_SIGNUP_FORM_ID } from '../../config';
 
 <style>
   dialog#email-signup-modal {
+    position: fixed;
+    inset: 0;
     width: 100%;
     max-width: 560px;
     max-height: calc(100vh - 48px);
@@ -298,7 +300,6 @@ import { HUBSPOT_PORTAL_ID, HUBSPOT_EMAIL_SIGNUP_FORM_ID } from '../../config';
     display: flex;
     flex-direction: column;
     gap: 24px;
-    position: relative;
     font-family: var(--font-sans);
   }
 
